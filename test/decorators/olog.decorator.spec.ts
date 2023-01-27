@@ -1,9 +1,10 @@
+import { OlogOptions } from './../../dist/interfaces/olog-options.interface.d';
 import { LOG_LEVEL } from './../../lib/enums/log-level.enum';
-import { olog } from '../../lib/decorators/index';
+import { olog, OLOG_KEY } from '../../lib/decorators/index';
 
 class TestClass {
     @olog({ level: LOG_LEVEL.ERROR })
-    sum(a: number, b: number) {
+    public test(a: number, b: number) {
         return a + b;
     }
 }
@@ -11,8 +12,7 @@ class TestClass {
 describe('olog decorator', () => {
     it('should log the method call with correct log level', () => {
         const testClass = new TestClass();
-        console.log = jest.fn();
-        testClass.sum(1, 2);
-        const a = Reflect.getMetadata(Symbol("olog"), testClass);
+        const metadata: OlogOptions = Reflect.getMetadata(OLOG_KEY, testClass, "test");
+        expect(metadata.level).toBe(LOG_LEVEL.ERROR);
     });
 });
