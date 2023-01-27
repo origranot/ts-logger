@@ -1,7 +1,7 @@
-import { DecoratorOptions, LogOptions } from './interfaces/olog-options.interface';
 import { LOG_LEVEL } from "./enums/log-level.enum";
 import * as clic from 'cli-color';
 import 'reflect-metadata';
+import { DecoratorOptions, LogOptions } from "./interfaces";
 
 export const OLOG_KEY = Symbol('olog');
 
