@@ -1,3 +1,5 @@
+import { LOG_LEVEL } from './../enums/log-level.enum';
+
 export interface OlogOptions {
-    level: 'debug' | 'info' | 'warn' | 'error' | 'fatal';
+    level: LOG_LEVEL
 }
