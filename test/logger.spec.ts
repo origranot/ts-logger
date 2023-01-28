@@ -13,18 +13,18 @@ describe('Logger', () => {
   });
 
   describe('log', () => {
-    it('should log the message with the correct level color', () => {
+    it('should log the message with the correct log level', () => {
       const spy = jest.spyOn(console, 'log');
 
-      logger.log(LOG_LEVEL.DEBUG, 'This is a debug message', { functionName: 'exampleFunction' });
+      logger.debug('This is a debug message');
       const output = stripAnsi(spy.mock.calls[0][0])
-      expect(output).toBe('DEBUG [exampleFunction]: This is a debug message');  
+      expect(output).toBe('DEBUG: This is a debug message');
     });
 
-    it('should log the message with the correct level color even if function name is not provided', () => {
+    it('should log the message with the correct log level even if options is not provided', () => {
       const spy = jest.spyOn(console, 'log');
 
-      logger.log(LOG_LEVEL.ERROR, 'This is a error message', {});
+      logger.error('This is a error message', {});
       const output = stripAnsi(spy.mock.calls[0][0])
       expect(output).toBe(`ERROR: This is a error message`);
     });
@@ -33,17 +33,31 @@ describe('Logger', () => {
       it('should not log the message if the log level is below the threshold', () => {
         const spy = jest.spyOn(console, 'log');
         logger = new Logger({ logLevelThreshold: LOG_LEVEL.INFO });
-        logger.log(LOG_LEVEL.DEBUG, 'This is a debug message', { functionName: 'exampleFunction' });
+        logger.debug('This is a debug message');
         expect(spy).not.toHaveBeenCalled();
       });
 
       it('should log the message if the log level is above the threshold', () => {
         const spy = jest.spyOn(console, 'log');
         logger = new Logger({ logLevelThreshold: LOG_LEVEL.DEBUG });
-        logger.log(LOG_LEVEL.INFO, 'This is a info message', { functionName: 'exampleFunction' });
+        logger.info('This is a info message');
         expect(spy).toHaveBeenCalled();
       });
     });
+
+    describe('timeStamps', () => {
+      it('should include the timestamp in the log message when timeStamps option is true', () => {
+        const spy = jest.spyOn(console, 'log');
+
+        logger = new Logger({ timeStamps: true });
+        logger.debug('This is a debug message');
+
+        const output = stripAnsi(spy.mock.calls[0][0])
+        const timestampRegex = /\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\]/;
+        expect(output).toMatch(timestampRegex);
+      });
+    });
+
   });
 
   describe('decorate', () => {

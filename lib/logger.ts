@@ -5,6 +5,7 @@ import 'reflect-metadata';
 export const OLOG_KEY = Symbol('olog');
 
 export interface LoggerOptions {
+    timeStamps?: boolean;
     logLevelThreshold?: LOG_LEVEL;
 }
 
@@ -13,7 +14,9 @@ export interface DecoratorOptions {
     executionTime?: boolean;
 }
 
-export interface LogOptions {
+export interface LogOptions { }
+
+interface InternalLogOptions extends LogOptions {
     functionName?: string;
 }
 
@@ -32,13 +35,15 @@ export class Logger {
         [LOG_LEVEL.FATAL]: clic.white
     }
 
-    log(level: LOG_LEVEL, message: string, options?: LogOptions) {
+    private log(level: LOG_LEVEL, message: string, logOptions?: InternalLogOptions) {
         if (level < this.options.logLevelThreshold) {
             return;
         }
 
-        let prefix = `${this.LOG_LEVEL_COLORS[level](level)}`
-        prefix += options.functionName ? ` [${options.functionName}]` : '';
+        let prefix: string = '';
+        prefix += this.options.timeStamps ? `[${new Date().toISOString()}] ` : '';
+        prefix += `${this.LOG_LEVEL_COLORS[level](level)}`
+        prefix += logOptions?.functionName ? ` [${logOptions.functionName}]` : '';
         console.log(`${prefix}: ${message}`);
     }
 
@@ -65,4 +70,10 @@ export class Logger {
             }
         }
     };
+
+    debug(message: string, options?: LogOptions) { this.log(LOG_LEVEL.DEBUG, message, options); }
+    info(message: string, options?: LogOptions) { this.log(LOG_LEVEL.INFO, message, options); }
+    warn(message: string, options?: LogOptions) { this.log(LOG_LEVEL.WARN, message, options); }
+    error(message: string, options?: LogOptions) { this.log(LOG_LEVEL.ERROR, message, options); }
+    fatal(message: string, options?: LogOptions) { this.log(LOG_LEVEL.FATAL, message, options); }
 }
