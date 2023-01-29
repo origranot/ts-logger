@@ -1,13 +1,9 @@
 import { Logger, LOG_LEVEL } from '../lib';
 
-const logger = new Logger({
-  timeStamps: true
-});
+const logger = new Logger({ timeStamps: true });
 
 class Calculator {
-  @logger.decorate(LOG_LEVEL.INFO, {
-    executionTime: true
-  })
+  @logger.decorate(LOG_LEVEL.INFO, { executionTime: true })
   sum(a: number, b: number) {
     return a + b;
   }
