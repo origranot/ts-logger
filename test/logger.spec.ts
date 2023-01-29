@@ -1,5 +1,5 @@
-import { Logger } from "../lib";
-import { LOG_LEVEL } from "../lib/enums/log-level.enum";
+import { Logger } from '../lib';
+import { LOG_LEVEL } from '../lib/enums/log-level.enum';
 
 describe('Logger', () => {
   let logger: Logger;
@@ -17,7 +17,7 @@ describe('Logger', () => {
       const spy = jest.spyOn(console, 'log');
 
       logger.debug('This is a debug message');
-      const output = stripAnsi(spy.mock.calls[0][0])
+      const output = stripAnsi(spy.mock.calls[0][0]);
       expect(output).toBe('DEBUG: This is a debug message');
     });
 
@@ -25,7 +25,7 @@ describe('Logger', () => {
       const spy = jest.spyOn(console, 'log');
 
       logger.error('This is a error message', {});
-      const output = stripAnsi(spy.mock.calls[0][0])
+      const output = stripAnsi(spy.mock.calls[0][0]);
       expect(output).toBe(`ERROR: This is a error message`);
     });
 
@@ -52,18 +52,18 @@ describe('Logger', () => {
         logger = new Logger({ timeStamps: true });
         logger.debug('This is a debug message');
 
-        const output = stripAnsi(spy.mock.calls[0][0])
-        const timestampRegex = /\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\]/;
+        const output = stripAnsi(spy.mock.calls[0][0]);
+        const timestampRegex =
+          /\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\]/;
         expect(output).toMatch(timestampRegex);
       });
     });
-
   });
 
   describe('decorate', () => {
     it('should log the function call and return value', () => {
       class TestClass {
-        @logger.decorate({ logLevel: LOG_LEVEL.DEBUG })
+        @logger.decorate(LOG_LEVEL.DEBUG)
         testFunction(a: number, b: number): number {
           return a + b;
         }
@@ -73,8 +73,8 @@ describe('Logger', () => {
       const test = new TestClass();
       test.testFunction(1, 2);
 
-      const incomingOutput = stripAnsi(spy.mock.calls[0][0])
-      const returnedOutput = stripAnsi(spy.mock.calls[1][0])
+      const incomingOutput = stripAnsi(spy.mock.calls[0][0]);
+      const returnedOutput = stripAnsi(spy.mock.calls[1][0]);
 
       expect(incomingOutput).toBe(`DEBUG [testFunction]: Incoming args: 1,2`);
       expect(returnedOutput).toBe(`DEBUG [testFunction]: Returned: 3`);
@@ -82,7 +82,7 @@ describe('Logger', () => {
 
     it('should log the function call and return value and execution time', () => {
       class TestClass {
-        @logger.decorate({ logLevel: LOG_LEVEL.DEBUG, executionTime: true })
+        @logger.decorate(LOG_LEVEL.DEBUG, { executionTime: true })
         testFunction(a: number, b: number): number {
           return a + b;
         }
@@ -92,16 +92,21 @@ describe('Logger', () => {
       const test = new TestClass();
       test.testFunction(1, 2);
 
-      const incomingOutput = stripAnsi(spy.mock.calls[0][0])
-      const returnedOutput = stripAnsi(spy.mock.calls[1][0])
-      const executionTimeOutput = stripAnsi(spy.mock.calls[2][0])
-
+      const incomingOutput = stripAnsi(spy.mock.calls[0][0]);
+      const returnedOutput = stripAnsi(spy.mock.calls[1][0]);
+      const executionTimeOutput = stripAnsi(spy.mock.calls[2][0]);
 
       expect(incomingOutput).toBe(`DEBUG [testFunction]: Incoming args: 1,2`);
       expect(returnedOutput).toBe(`DEBUG [testFunction]: Returned: 3`);
-      expect(executionTimeOutput).toContain(`DEBUG [testFunction]: Execution time`);
+      expect(executionTimeOutput).toContain(
+        `DEBUG [testFunction]: Execution time`
+      );
     });
   });
 });
 
-const stripAnsi = (str: string) => str.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '');
+const stripAnsi = (str: string) =>
+  str.replace(
+    /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
+    ''
+  );
