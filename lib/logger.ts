@@ -46,7 +46,7 @@ export class Logger {
     console.log(`${prefix}: ${message}`);
   }
 
-  decorate(level: LOG_LEVEL, options?: DecoratorOptions) {
+  decorate(level: LOG_LEVEL, options: DecoratorOptions = {}) {
     const { executionTime } = options;
     return (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => {
       if (!descriptor) {
