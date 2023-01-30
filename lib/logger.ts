@@ -58,13 +58,17 @@ export class Logger {
       const originalMethod = descriptor.value;
       descriptor.value = (...args: any[]) => {
         const start = Date.now();
-        this.log(level, `Incoming args: ${args}`, {
-          functionName: propertyKey
-        });
+        if (args.length) {
+          this.log(level, `Incoming args: ${args}`, {
+            functionName: propertyKey
+          });
+        }
         const result = originalMethod.apply(this, args);
-        this.log(level, `Returned: ${result}`, {
-          functionName: propertyKey
-        });
+        if (result) {
+          this.log(level, `Returned: ${JSON.stringify(result)}`, {
+            functionName: propertyKey
+          });
+        }
         if (executionTime) {
           const end = Date.now();
           this.log(level, `Execution time: ${end - start}ms`, {
