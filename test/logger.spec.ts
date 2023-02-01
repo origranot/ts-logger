@@ -53,8 +53,7 @@ describe('Logger', () => {
         logger.debug('This is a debug message');
 
         const output = stripAnsi(spy.mock.calls[0][0]);
-        const timestampRegex =
-          /\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\]/;
+        const timestampRegex = /\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\]/;
         expect(output).toMatch(timestampRegex);
       });
     });

@@ -1,6 +1,7 @@
 import { LOG_LEVEL } from './enums/log-level.enum';
 import * as clic from 'cli-color';
 import 'reflect-metadata';
+import { getTimeStamp } from './utils/timestamps';
 
 export const OLOG_KEY = Symbol('olog');
 
@@ -13,7 +14,7 @@ export interface DecoratorOptions {
   executionTime?: boolean;
 }
 
-export interface LogOptions {}
+export interface LogOptions { }
 
 interface InternalLogOptions extends LogOptions {
   functionName?: string;
@@ -40,7 +41,7 @@ export class Logger {
     }
 
     let prefix: string = '';
-    prefix += this.options.timeStamps ? `[${new Date().toISOString()}] ` : '';
+    prefix += this.options.timeStamps ? `[${getTimeStamp()}] ` : '';
     prefix += `${this.LOG_LEVEL_COLORS[level](level)}`;
     prefix += logOptions?.functionName ? ` [${logOptions.functionName}]` : '';
     console.log(`${prefix}: ${message}`);
