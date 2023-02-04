@@ -1,4 +1,4 @@
-import { Logger, LOG_LEVEL } from '../lib';
+import { Logger, LOG_LEVEL } from '../src';
 
 const logger = new Logger({ timeStamps: true });
 

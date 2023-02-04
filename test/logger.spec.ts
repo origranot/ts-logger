@@ -1,5 +1,4 @@
-import { Logger } from '../src';
-import { LOG_LEVEL } from '../src/enums/log-level.enum';
+import { Logger, LOG_LEVEL } from '../src/index';
 
 describe('Logger', () => {
   let logger: Logger;

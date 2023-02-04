@@ -1,6 +1,6 @@
-import { LOG_LEVEL } from './enums/log-level.enum';
 import * as clic from 'cli-color';
 import 'reflect-metadata';
+import { LOG_LEVEL } from './enums';
 import { getTimeStamp } from './utils/timestamps';
 
 export const OLOG_KEY = Symbol('olog');

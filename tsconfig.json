@@ -11,5 +11,9 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
   },
-  "files": ["./src/index.ts"]
+  "files": ["./src/index.ts"],
+    "exclude": [
+        "node_modules",
+        "lib"
+    ]
 }
