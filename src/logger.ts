@@ -1,4 +1,4 @@
-import * as clic from 'cli-color';
+import clic from 'cli-color';
 import 'reflect-metadata';
 import { LOG_LEVEL } from './enums';
 import { getTimeStamp } from './utils/timestamps';
@@ -27,7 +27,7 @@ export class Logger {
     };
   }
 
-  options: LoggerOptions;
+  private options: LoggerOptions;
 
   private LOG_LEVEL_COLORS = {
     [LOG_LEVEL.DEBUG]: clic.blue,
