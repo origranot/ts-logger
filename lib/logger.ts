@@ -44,7 +44,7 @@ export class Logger {
     prefix += this.options.timeStamps ? `[${getTimeStamp()}] ` : '';
     prefix += `${this.LOG_LEVEL_COLORS[level](level)}`;
     prefix += logOptions?.functionName ? ` [${logOptions.functionName}]` : '';
-    console.log(`${prefix}: ${message}`);
+    console.log(`${prefix} ${message}`);
   }
 
   decorate(level: LOG_LEVEL, options: DecoratorOptions = {}) {
@@ -60,13 +60,13 @@ export class Logger {
       descriptor.value = (...args: any[]) => {
         const start = Date.now();
         if (args.length) {
-          this.log(level, `Incoming args: ${args}`, {
+          this.log(level, `Arguments: ${args}`, {
             functionName: propertyKey
           });
         }
         const result = originalMethod.apply(this, args);
         if (result) {
-          this.log(level, `Returned: ${JSON.stringify(result)}`, {
+          this.log(level, `Return value: ${JSON.stringify(result)}`, {
             functionName: propertyKey
           });
         }
