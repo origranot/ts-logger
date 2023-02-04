@@ -1,4 +1,4 @@
-# ts-logger-decorator
+# ts-logger
 
 A customizable and flexible logging library for TypeScript applications.
 
@@ -12,7 +12,7 @@ A customizable and flexible logging library for TypeScript applications.
 - Ability to decorate class methods to log their arguments, return values, and execution time.
 
 ## Installation
-```npm install ts-logger-decorator```
+```npm install @origranot/ts-logger```
 
 ## Usage
 
