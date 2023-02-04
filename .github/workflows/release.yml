@@ -5,6 +5,8 @@ on:
     branches: [main]
     types:
       - completed
+permissions:
+  contents: write
 jobs:
   release:
     name: Release
