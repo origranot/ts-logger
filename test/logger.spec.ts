@@ -1,5 +1,5 @@
-import { Logger } from '../lib';
-import { LOG_LEVEL } from '../lib/enums/log-level.enum';
+import { Logger } from '../src';
+import { LOG_LEVEL } from '../src/enums/log-level.enum';
 
 describe('Logger', () => {
   let logger: Logger;
@@ -18,7 +18,7 @@ describe('Logger', () => {
 
       logger.debug('This is a debug message');
       const output = stripAnsi(spy.mock.calls[0][0]);
-      expect(output).toBe('DEBUG: This is a debug message');
+      expect(output).toBe('DEBUG This is a debug message');
     });
 
     it('should log the message with the correct log level even if options is not provided', () => {
@@ -26,7 +26,7 @@ describe('Logger', () => {
 
       logger.error('This is a error message', {});
       const output = stripAnsi(spy.mock.calls[0][0]);
-      expect(output).toBe(`ERROR: This is a error message`);
+      expect(output).toBe(`ERROR This is a error message`);
     });
 
     describe('logLevelThreshold', () => {
@@ -75,8 +75,8 @@ describe('Logger', () => {
       const incomingOutput = stripAnsi(spy.mock.calls[0][0]);
       const returnedOutput = stripAnsi(spy.mock.calls[1][0]);
 
-      expect(incomingOutput).toBe(`DEBUG [testFunction]: Incoming args: 1,2`);
-      expect(returnedOutput).toBe(`DEBUG [testFunction]: Returned: 3`);
+      expect(incomingOutput).toBe(`DEBUG [testFunction] Arguments: 1,2`);
+      expect(returnedOutput).toBe(`DEBUG [testFunction] Return value: 3`);
     });
 
     it('should log the function call and return value and execution time', () => {
@@ -95,10 +95,10 @@ describe('Logger', () => {
       const returnedOutput = stripAnsi(spy.mock.calls[1][0]);
       const executionTimeOutput = stripAnsi(spy.mock.calls[2][0]);
 
-      expect(incomingOutput).toBe(`DEBUG [testFunction]: Incoming args: 1,2`);
-      expect(returnedOutput).toBe(`DEBUG [testFunction]: Returned: 3`);
+      expect(incomingOutput).toBe(`DEBUG [testFunction] Arguments: 1,2`);
+      expect(returnedOutput).toBe(`DEBUG [testFunction] Return value: 3`);
       expect(executionTimeOutput).toContain(
-        `DEBUG [testFunction]: Execution time`
+        `DEBUG [testFunction] Execution time`
       );
     });
   });

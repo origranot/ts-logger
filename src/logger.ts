@@ -14,18 +14,20 @@ export interface DecoratorOptions {
   executionTime?: boolean;
 }
 
-export interface LogOptions { }
+export interface LogOptions {}
 
 interface InternalLogOptions extends LogOptions {
   functionName?: string;
 }
 
 export class Logger {
-  constructor(private options?: LoggerOptions) {
-    this.options = options || {
+  constructor(loggerOptions?: LoggerOptions) {
+    this.options = loggerOptions || {
       logLevelThreshold: LOG_LEVEL.DEBUG
     };
   }
+
+  options: LoggerOptions;
 
   private LOG_LEVEL_COLORS = {
     [LOG_LEVEL.DEBUG]: clic.blue,
@@ -36,7 +38,7 @@ export class Logger {
   };
 
   private log(level: LOG_LEVEL, message: string, logOptions?: InternalLogOptions) {
-    if (level < this.options.logLevelThreshold) {
+    if (level < this.options.logLevelThreshold!) {
       return;
     }
 
