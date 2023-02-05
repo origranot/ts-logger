@@ -19,7 +19,7 @@ A customizable and flexible logging library for TypeScript applications.
 ### Basic logger
 
 ```typescript
-import { Logger } from 'ts-logger-decorator';
+import { Logger } from '@origranot/ts-logger';
 
 const logger = new Logger({
   timeStamps: true,
@@ -40,7 +40,7 @@ logger.fatal('Fatal message');
 ### Decorated functions example
 
 ```typescript
-import { Logger, LOG_LEVEL } from 'ts-logger-decorator';
+import { Logger, LOG_LEVEL} from '@origranot/ts-logger';
 
 const logger = new Logger({ timeStamps: true });
 
