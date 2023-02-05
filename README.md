@@ -9,10 +9,12 @@ A customizable and flexible logging library for TypeScript applications.
 - Option to set log level threshold.
 - Option to log execution time of decorated functions.
 - Logs can be color-coded based on the log level.
-- Ability to decorate class methods to log their arguments, return values, and execution time.
+- Ability to decorate class methods to log their arguments, return values, and execution
+  time.
 
 ## Installation
-```npm install @origranot/ts-logger```
+
+`npm install @origranot/ts-logger`
 
 ## Usage
 
@@ -22,7 +24,7 @@ A customizable and flexible logging library for TypeScript applications.
 import { Logger } from '@origranot/ts-logger';
 
 const logger = new Logger({
-  timeStamps: true,
+  timeStamps: true
 });
 
 logger.debug('Debug message');
@@ -30,17 +32,24 @@ logger.info('Info message');
 logger.warn('Warn message');
 logger.error('Error message');
 logger.fatal('Fatal message');
+
+logger.info('You can also pass variables', {
+  metadata: {
+    foo: 'baz'
+  }
+});
 ```
 
 ### Optional parameters
 
 - timeStamps (Boolean): Whether to include timestamps in logs (default: false).
-- threshold (LOG_LEVEL): The log level threshold, logs with a lower level than the threshold will be ignored (default: 'DEBUG').
+- threshold (LOG_LEVEL): The log level threshold, logs with a lower level than the
+  threshold will be ignored (default: 'DEBUG').
 
 ### Decorated functions example
 
 ```typescript
-import { Logger, LOG_LEVEL} from '@origranot/ts-logger';
+import { Logger, LOG_LEVEL } from '@origranot/ts-logger';
 
 const logger = new Logger({ timeStamps: true });
 
@@ -56,17 +65,14 @@ example.exampleMethod(1, 2);
 
 // Output: [2022-01-01 00:00:00] LOG_LEVEL [ExampleClass.exampleMethod] Arguments: [1,2]
 // Output: [2022-01-01 00:00:00] LOG_LEVEL [ExampleClass.exampleMethod] Return value: 3
-// Output: [2022-01-01 00:00:00] LOG_LEVEL [ExampleClass.exampleMethod] Execution time: 100ms 
+// Output: [2022-01-01 00:00:00] LOG_LEVEL [ExampleClass.exampleMethod] Execution time: 100ms
 ```
 
 ### Optional parameters
 
-- executionTime (Boolean): Whether to calculate and print the function execution time. (default: false)
+- executionTime (Boolean): Whether to calculate and print the function execution time.
+  (default: false)
 
 ## Contributing
 
 Contributions are welcome! For feature requests and bug reports, please open an issue.
-
-
-
-

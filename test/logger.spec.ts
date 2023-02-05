@@ -23,9 +23,24 @@ describe('Logger', () => {
     it('should log the message with the correct log level even if options is not provided', () => {
       const spy = jest.spyOn(console, 'log');
 
-      logger.error('This is a error message', {});
+      logger.error('This is an error message', {});
       const output = stripAnsi(spy.mock.calls[0][0]);
-      expect(output).toBe(`ERROR This is a error message`);
+      expect(output).toBe(`ERROR This is an error message`);
+    });
+
+    it('should log the message with the metadata object', () => {
+      const spy = jest.spyOn(console, 'log');
+      const inputMetadata = { foo: 'bar' };
+
+      logger.info('This is a info log with metadata object', {
+        metadata: inputMetadata
+      });
+
+      const message = stripAnsi(spy.mock.calls[0][0]);
+      const metadata = spy.mock.calls[0][1];
+
+      expect(message).toBe(`INFO This is a info log with metadata object`);
+      expect(metadata).toEqual(inputMetadata);
     });
 
     describe('logLevelThreshold', () => {
@@ -96,9 +111,7 @@ describe('Logger', () => {
 
       expect(incomingOutput).toBe(`DEBUG [testFunction] Arguments: 1,2`);
       expect(returnedOutput).toBe(`DEBUG [testFunction] Return value: 3`);
-      expect(executionTimeOutput).toContain(
-        `DEBUG [testFunction] Execution time`
-      );
+      expect(executionTimeOutput).toContain(`DEBUG [testFunction] Execution time`);
     });
   });
 });
