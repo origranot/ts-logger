@@ -14,7 +14,11 @@ export interface DecoratorOptions {
   executionTime?: boolean;
 }
 
-export interface LogOptions {}
+export interface LogOptions {
+  metadata?: {
+    [name: string]: any;
+  };
+}
 
 interface InternalLogOptions extends LogOptions {
   functionName?: string;
@@ -37,7 +41,7 @@ export class Logger {
     [LOG_LEVEL.FATAL]: clic.white
   };
 
-  private log(level: LOG_LEVEL, message: string, logOptions?: InternalLogOptions) {
+  private log(level: LOG_LEVEL, message: string, options?: InternalLogOptions) {
     if (level < this.options.logLevelThreshold!) {
       return;
     }
@@ -45,8 +49,13 @@ export class Logger {
     let prefix: string = '';
     prefix += this.options.timeStamps ? `[${getTimeStamp()}] ` : '';
     prefix += `${this.LOG_LEVEL_COLORS[level](level)}`;
-    prefix += logOptions?.functionName ? ` [${logOptions.functionName}]` : '';
-    console.log(`${prefix} ${message}`);
+    prefix += options?.functionName ? ` [${options.functionName}]` : '';
+
+    const final: any[] = [`${prefix} ${message}`];
+    if (options?.metadata) {
+      final.push(options?.metadata);
+    }
+    console.log(...final);
   }
 
   decorate(level: LOG_LEVEL, options: DecoratorOptions = {}) {
