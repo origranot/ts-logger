@@ -1,13 +1,14 @@
-import clic from 'cli-color';
 import 'reflect-metadata';
 import { LOG_LEVEL } from './enums';
-import { getTimeStamp } from './utils/timestamps';
+import { LogHandler } from './log-handler';
+import { ConsoleHandler } from './handlers';
 
 export const OLOG_KEY = Symbol('olog');
 
 export interface LoggerOptions {
   timeStamps?: boolean;
-  logLevelThreshold?: LOG_LEVEL;
+  threshold?: LOG_LEVEL;
+  handlers?: LogHandler[];
 }
 
 export interface DecoratorOptions {
@@ -20,42 +21,30 @@ export interface LogOptions {
   };
 }
 
-interface InternalLogOptions extends LogOptions {
-  functionName?: string;
-}
-
 export class Logger {
   constructor(loggerOptions?: LoggerOptions) {
     this.options = loggerOptions || {
-      logLevelThreshold: LOG_LEVEL.DEBUG
+      threshold: LOG_LEVEL.DEBUG
     };
+
+    this.options.handlers = this.options.handlers || [new ConsoleHandler()];
   }
 
   private options: LoggerOptions;
 
-  private LOG_LEVEL_COLORS = {
-    [LOG_LEVEL.DEBUG]: clic.blue,
-    [LOG_LEVEL.INFO]: clic.green,
-    [LOG_LEVEL.WARN]: clic.yellow,
-    [LOG_LEVEL.ERROR]: clic.red,
-    [LOG_LEVEL.FATAL]: clic.white
-  };
-
-  private log(level: LOG_LEVEL, message: string, options?: InternalLogOptions) {
-    if (level < this.options.logLevelThreshold!) {
+  private log(level: LOG_LEVEL, message: string, options?: LogOptions) {
+    if (level < this.options.threshold!) {
       return;
     }
 
-    let prefix: string = '';
-    prefix += this.options.timeStamps ? `[${getTimeStamp()}] ` : '';
-    prefix += `${this.LOG_LEVEL_COLORS[level](level)}`;
-    prefix += options?.functionName ? ` [${options.functionName}]` : '';
-
-    const final: any[] = [`${prefix} ${message}`];
-    if (options?.metadata) {
-      final.push(options?.metadata);
+    for (const handler of this.options.handlers!) {
+      handler.handle({
+        level,
+        message,
+        metadata: options?.metadata,
+        timestamp: this.options.timeStamps ? new Date() : undefined
+      });
     }
-    console.log(...final);
   }
 
   decorate(level: LOG_LEVEL, options: DecoratorOptions = {}) {
@@ -65,28 +54,33 @@ export class Logger {
         console.log('descriptor is null, not a function?');
         return;
       }
+
       // apply the decorator to a class method
       Reflect.defineMetadata(OLOG_KEY, options, target, propertyKey);
       const originalMethod = descriptor.value;
       descriptor.value = (...args: any[]) => {
         const start = Date.now();
+        const metadata: {
+          args?: any[];
+          returns?: any;
+          executionTime?: string;
+        } = {};
+
         if (args.length) {
-          this.log(level, `Arguments: ${args}`, {
-            functionName: propertyKey
-          });
+          metadata.args = args;
         }
+
         const result = originalMethod.apply(this, args);
         if (result) {
-          this.log(level, `Return value: ${JSON.stringify(result)}`, {
-            functionName: propertyKey
-          });
+          metadata.returns = result;
         }
+
         if (executionTime) {
           const end = Date.now();
-          this.log(level, `Execution time: ${end - start}ms`, {
-            functionName: propertyKey
-          });
+          metadata.executionTime = `${end - start}ms`;
         }
+
+        this.log(level, `[${propertyKey}]`, { metadata });
         return result;
       };
     };

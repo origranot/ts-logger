@@ -1,4 +1,4 @@
-import { Logger, LOG_LEVEL } from '../src/index';
+import { ConsoleHandler, Logger, LOG_LEVEL } from '../src';
 
 describe('Logger', () => {
   let logger: Logger;
@@ -9,6 +9,29 @@ describe('Logger', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  it('should create a logger with default options', () => {
+    expect(logger).toBeDefined();
+  });
+
+  it('should create a logger with the provided options', () => {
+    const threshold = LOG_LEVEL.INFO;
+    logger = new Logger({ threshold: threshold });
+    expect(logger).toBeDefined();
+    expect(logger['options'].threshold).toBe(threshold);
+  });
+
+  it('should create a logger with default values', () => {
+    logger = new Logger();
+    expect(logger).toBeDefined();
+
+    // Default log level threshold should be DEBUG
+    expect(logger['options'].threshold).toBe(LOG_LEVEL.DEBUG);
+
+    // Default handlers array should be an array with a ConsoleHandler instance in it
+    expect(logger['options'].handlers).toHaveLength(1);
+    expect(logger['options'].handlers![0]).toBeInstanceOf(ConsoleHandler);
   });
 
   describe('log', () => {
@@ -28,32 +51,17 @@ describe('Logger', () => {
       expect(output).toBe(`ERROR This is an error message`);
     });
 
-    it('should log the message with the metadata object', () => {
-      const spy = jest.spyOn(console, 'log');
-      const inputMetadata = { foo: 'bar' };
-
-      logger.info('This is a info log with metadata object', {
-        metadata: inputMetadata
-      });
-
-      const message = stripAnsi(spy.mock.calls[0][0]);
-      const metadata = spy.mock.calls[0][1];
-
-      expect(message).toBe(`INFO This is a info log with metadata object`);
-      expect(metadata).toEqual(inputMetadata);
-    });
-
     describe('logLevelThreshold', () => {
       it('should not log the message if the log level is below the threshold', () => {
         const spy = jest.spyOn(console, 'log');
-        logger = new Logger({ logLevelThreshold: LOG_LEVEL.INFO });
+        logger = new Logger({ threshold: LOG_LEVEL.INFO });
         logger.debug('This is a debug message');
         expect(spy).not.toHaveBeenCalled();
       });
 
       it('should log the message if the log level is above the threshold', () => {
         const spy = jest.spyOn(console, 'log');
-        logger = new Logger({ logLevelThreshold: LOG_LEVEL.DEBUG });
+        logger = new Logger({ threshold: LOG_LEVEL.DEBUG });
         logger.info('This is a info message');
         expect(spy).toHaveBeenCalled();
       });
@@ -86,11 +94,12 @@ describe('Logger', () => {
       const test = new TestClass();
       test.testFunction(1, 2);
 
-      const incomingOutput = stripAnsi(spy.mock.calls[0][0]);
-      const returnedOutput = stripAnsi(spy.mock.calls[1][0]);
+      const messageOutput = stripAnsi(spy.mock.calls[0][0]);
+      const metadataOutput = spy.mock.calls[0][1];
 
-      expect(incomingOutput).toBe(`DEBUG [testFunction] Arguments: 1,2`);
-      expect(returnedOutput).toBe(`DEBUG [testFunction] Return value: 3`);
+      expect(messageOutput).toBe(`DEBUG [testFunction]`);
+      expect(metadataOutput.args).toEqual([1, 2]);
+      expect(metadataOutput.returns).toEqual(3);
     });
 
     it('should log the function call and return value and execution time', () => {
@@ -105,13 +114,13 @@ describe('Logger', () => {
       const test = new TestClass();
       test.testFunction(1, 2);
 
-      const incomingOutput = stripAnsi(spy.mock.calls[0][0]);
-      const returnedOutput = stripAnsi(spy.mock.calls[1][0]);
-      const executionTimeOutput = stripAnsi(spy.mock.calls[2][0]);
+      const messageOutput = stripAnsi(spy.mock.calls[0][0]);
+      const metadataOutput = spy.mock.calls[0][1];
 
-      expect(incomingOutput).toBe(`DEBUG [testFunction] Arguments: 1,2`);
-      expect(returnedOutput).toBe(`DEBUG [testFunction] Return value: 3`);
-      expect(executionTimeOutput).toContain(`DEBUG [testFunction] Execution time`);
+      expect(messageOutput).toBe(`DEBUG [testFunction]`);
+      expect(metadataOutput.args).toEqual([1, 2]);
+      expect(metadataOutput.returns).toEqual(3);
+      expect(metadataOutput.executionTime).toBeDefined()
     });
   });
 });
