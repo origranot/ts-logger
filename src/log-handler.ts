@@ -6,7 +6,7 @@ export interface HandlerPayload {
   metadata?: {
     [key: string]: any;
   };
-  timestamp: Date;
+  timestamp?: Date;
 }
 
 export abstract class LogHandler {

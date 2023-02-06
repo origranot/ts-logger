@@ -1,16 +1,19 @@
-# ts-logger
+# :zap: ts-logger
 
-A customizable and flexible logging library for TypeScript applications.
+A logging library designed to simplify the process of logging in your TypeScript applications. With features such as five log levels, custom log handlers, method decoration options, timestamps, and log level thresholding, you'll have greater control over your log output.
 
-## Features
+Our library also provides the flexibility to extend its functionality through custom log handlers, enabling you to meet the specific needs of your project. Say goodbye to cluttered and unorganized logs and get started with ts-logger today!💪
 
-- Supports logging at five different levels (DEBUG, INFO, WARN, ERROR, FATAL).
-- Option to include timestamps in logs.
-- Option to set log level threshold.
-- Option to log execution time of decorated functions.
-- Logs can be color-coded based on the log level.
-- Ability to decorate class methods to log their arguments, return values, and execution
-  time.
+
+## Features :star:
+
+- Supports logging at five different levels (:bug: DEBUG, :information_source: INFO, :warning: WARN, :exclamation: ERROR, :fire: FATAL).
+- Ability to add custom log handlers to extend the functionality of the library. 💬
+- Ability to decorate class methods to log their arguments, return values, and execution time. 📊
+- Option to include timestamps in logs. 🕰️
+- Option to set log level threshold. 🎛️
+- Option to log execution time of decorated functions. ⏱️
+- Logs can be color-coded based on the log level. 🎨
 
 ## Installation
 
@@ -45,6 +48,8 @@ logger.info('You can also pass variables', {
 - timeStamps (Boolean): Whether to include timestamps in logs (default: false).
 - threshold (LOG_LEVEL): The log level threshold, logs with a lower level than the
   threshold will be ignored (default: 'DEBUG').
+- handlers: Array of handlers to process and log the data. (default: [ConsoleHandler])
+
 
 ### Decorated functions example
 
@@ -63,15 +68,35 @@ class ExampleClass {
 const example = new ExampleClass();
 example.exampleMethod(1, 2);
 
-// Output: [2022-01-01 00:00:00] LOG_LEVEL [ExampleClass.exampleMethod] Arguments: [1,2]
-// Output: [2022-01-01 00:00:00] LOG_LEVEL [ExampleClass.exampleMethod] Return value: 3
-// Output: [2022-01-01 00:00:00] LOG_LEVEL [ExampleClass.exampleMethod] Execution time: 100ms
+/* 
+  Output: [2022-01-01 00:00:00] [exampleMethod] {
+    args: [1, 2],
+    returns: 3,
+    executionTime: 3ms
+  }
+*/
 ```
 
 ### Optional parameters
 
 - executionTime (Boolean): Whether to calculate and print the function execution time.
   (default: false)
+
+## Log handlers
+
+The library allows you to add custom log handlers to extend the functionality of the
+library. A log handler is a simple class that implements a handle method that takes in a
+LogMessage object and outputs the log message in the desired format.
+
+```typescript
+import { Logger, LogMessage, LOG_LEVEL } from '@origranot/ts-logger';
+
+export class CustomHandler extends LogHandler {
+  handle(payload: HandlerPayload) {
+    console.log(`[${payload.timestamp}] - ${payload.message}`);
+  }
+}
+```
 
 ## Contributing
 
