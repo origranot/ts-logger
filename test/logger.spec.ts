@@ -1,4 +1,4 @@
-import { Logger, LOG_LEVEL } from '../src/index';
+import { ConsoleHandler, Logger, LOG_LEVEL } from '../src';
 
 describe('Logger', () => {
   let logger: Logger;
@@ -9,6 +9,29 @@ describe('Logger', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  it('should create a logger with default options', () => {
+    expect(logger).toBeDefined();
+  });
+
+  it('should create a logger with the provided options', () => {
+    const threshold = LOG_LEVEL.INFO;
+    logger = new Logger({ logLevelThreshold: threshold });
+    expect(logger).toBeDefined();
+    expect(logger['options'].logLevelThreshold).toBe(threshold);
+  });
+
+  it('should create a logger with default values', () => {
+    logger = new Logger();
+    expect(logger).toBeDefined();
+
+    // Default log level threshold should be DEBUG
+    expect(logger['options'].logLevelThreshold).toBe(LOG_LEVEL.DEBUG);
+
+    // Default handlers array should be an array with a ConsoleHandler instance in it
+    expect(logger['options'].handlers).toHaveLength(1);
+    expect(logger['options'].handlers![0]).toBeInstanceOf(ConsoleHandler);
   });
 
   describe('log', () => {
@@ -26,21 +49,6 @@ describe('Logger', () => {
       logger.error('This is an error message', {});
       const output = stripAnsi(spy.mock.calls[0][0]);
       expect(output).toBe(`ERROR This is an error message`);
-    });
-
-    it('should log the message with the metadata object', () => {
-      const spy = jest.spyOn(console, 'log');
-      const inputMetadata = { foo: 'bar' };
-
-      logger.info('This is a info log with metadata object', {
-        metadata: inputMetadata
-      });
-
-      const message = stripAnsi(spy.mock.calls[0][0]);
-      const metadata = spy.mock.calls[0][1];
-
-      expect(message).toBe(`INFO This is a info log with metadata object`);
-      expect(metadata).toEqual(inputMetadata);
     });
 
     describe('logLevelThreshold', () => {

@@ -2,12 +2,15 @@ import clic from 'cli-color';
 import 'reflect-metadata';
 import { LOG_LEVEL } from './enums';
 import { getTimeStamp } from './utils/timestamps';
+import { LogHandler } from './log-handler';
+import { ConsoleHandler } from './handlers';
 
 export const OLOG_KEY = Symbol('olog');
 
 export interface LoggerOptions {
   timeStamps?: boolean;
   logLevelThreshold?: LOG_LEVEL;
+  handlers?: LogHandler[];
 }
 
 export interface DecoratorOptions {
@@ -29,6 +32,8 @@ export class Logger {
     this.options = loggerOptions || {
       logLevelThreshold: LOG_LEVEL.DEBUG
     };
+
+    this.options.handlers = this.options.handlers || [new ConsoleHandler()];
   }
 
   private options: LoggerOptions;
@@ -51,11 +56,14 @@ export class Logger {
     prefix += `${this.LOG_LEVEL_COLORS[level](level)}`;
     prefix += options?.functionName ? ` [${options.functionName}]` : '';
 
-    const final: any[] = [`${prefix} ${message}`];
-    if (options?.metadata) {
-      final.push(options?.metadata);
+    for (const handler of this.options.handlers!) {
+      handler.handle({
+        level,
+        message: `${prefix} ${message}`,
+        metadata: options?.metadata,
+        timestamp: new Date()
+      });
     }
-    console.log(...final);
   }
 
   decorate(level: LOG_LEVEL, options: DecoratorOptions = {}) {
@@ -65,6 +73,7 @@ export class Logger {
         console.log('descriptor is null, not a function?');
         return;
       }
+
       // apply the decorator to a class method
       Reflect.defineMetadata(OLOG_KEY, options, target, propertyKey);
       const originalMethod = descriptor.value;
