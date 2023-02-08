@@ -6,6 +6,7 @@ export enum COLOR {
     BLINK = '\x1b[5m',
     REVERSE = '\x1b[7m',
     HIDDEN = '\x1b[8m',
+
     BLACK = '\x1b[30m',
     RED = '\x1b[31m',
     GREEN = '\x1b[32m',
@@ -14,6 +15,7 @@ export enum COLOR {
     MAGENTA = '\x1b[35m',
     CYAN = '\x1b[36m',
     WHITE = '\x1b[37m',
+    
     BG_BLACK = '\x1b[40m',
     BG_RED = '\x1b[41m',
     BG_GREEN = '\x1b[42m',

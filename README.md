@@ -86,10 +86,10 @@ example.exampleMethod(1, 2);
 
 The library allows you to add custom log handlers to extend the functionality of the
 library. A log handler is a simple class that implements a handle method that takes in a
-LogMessage object and outputs the log message in the desired format.
+HandlerPayload object and outputs the log message in the desired format.
 
 ```typescript
-import { Logger, LogMessage, LOG_LEVEL } from '@origranot/ts-logger';
+import { Logger, HandlerPayload } from '@origranot/ts-logger';
 
 export class CustomHandler extends LogHandler {
   handle(payload: HandlerPayload) {
