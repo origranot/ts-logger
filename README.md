@@ -1,6 +1,6 @@
 # :zap: ts-logger
 
-A logging library designed to simplify the process of logging in your TypeScript applications. With features such as five log levels, custom log handlers, method decoration options, timestamps, and log level thresholding, you'll have greater control over your log output.
+A logging library designed to simplify the process of logging in your TypeScript applications. With zero dependencies and features such as five log levels, custom log handlers, method decoration options, timestamps, and log level thresholding, you'll have greater control over your log output.
 
 Our library also provides the flexibility to extend its functionality through custom log handlers, enabling you to meet the specific needs of your project. Say goodbye to cluttered and unorganized logs and get started with ts-logger today!💪
 
@@ -86,10 +86,10 @@ example.exampleMethod(1, 2);
 
 The library allows you to add custom log handlers to extend the functionality of the
 library. A log handler is a simple class that implements a handle method that takes in a
-LogMessage object and outputs the log message in the desired format.
+HandlerPayload object and outputs the log message in the desired format.
 
 ```typescript
-import { Logger, LogMessage, LOG_LEVEL } from '@origranot/ts-logger';
+import { Logger, HandlerPayload } from '@origranot/ts-logger';
 
 export class CustomHandler extends LogHandler {
   handle(payload: HandlerPayload) {

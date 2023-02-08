@@ -82,6 +82,26 @@ describe('Logger', () => {
   });
 
   describe('decorate', () => {
+    it('should log the function call and log empty args', () => {
+      class TestClass {
+        @logger.decorate(LOG_LEVEL.INFO)
+        testFunction(): number {
+          return 5;
+        }
+      }
+
+      const spy = jest.spyOn(console, 'log');
+      const test = new TestClass();
+      test.testFunction();
+
+      const messageOutput = stripAnsi(spy.mock.calls[0][0]);
+      const metadataOutput = spy.mock.calls[0][1];
+
+      expect(messageOutput).toBe(`INFO [testFunction]`);
+      expect(metadataOutput.args).toEqual([]);
+      expect(metadataOutput.returns).toEqual(5);
+    });
+
     it('should log the function call and return value', () => {
       class TestClass {
         @logger.decorate(LOG_LEVEL.DEBUG)
