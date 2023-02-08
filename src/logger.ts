@@ -1,9 +1,6 @@
-import 'reflect-metadata';
 import { LOG_LEVEL } from './enums';
 import { LogHandler } from './log-handler';
 import { ConsoleHandler } from './handlers';
-
-export const OLOG_KEY = Symbol('olog');
 
 export interface LoggerOptions {
   timeStamps?: boolean;
@@ -55,8 +52,6 @@ export class Logger {
         return;
       }
 
-      // apply the decorator to a class method
-      Reflect.defineMetadata(OLOG_KEY, options, target, propertyKey);
       const originalMethod = descriptor.value;
       descriptor.value = (...args: any[]) => {
         const start = Date.now();
@@ -66,12 +61,10 @@ export class Logger {
           executionTime?: string;
         } = {};
 
-        if (args.length) {
-          metadata.args = args;
-        }
+        metadata.args = args || [];
 
         const result = originalMethod.apply(this, args);
-        if (result) {
+        if (result !== undefined) {
           metadata.returns = result;
         }
 
