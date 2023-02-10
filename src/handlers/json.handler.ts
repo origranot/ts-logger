@@ -1,6 +1,5 @@
 import { HandlerPayload, LogHandler } from '../log-handler';
-import stringify from 'fast-safe-stringify';
-import { getTimeStamp } from '../utils';
+import { getTimeStamp, stringify } from '../utils';
 
 export class JsonHandler extends LogHandler {
   handle(payload: HandlerPayload): void {

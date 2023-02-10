@@ -41,35 +41,40 @@ describe('Json Handler', () => {
       expect(metadata).toEqual(inputMetadata);
     });
 
-    it('should log the message without metadata in json format to the console', () => {
+    it('should log the message without metadata and timestamp in json format to the console', () => {
       const spy = jest.spyOn(console, 'log');
 
       handler.handle({
         level: LOG_LEVEL.INFO,
+        message: 'This is an info message'
+      });
+
+      const loggedJson = JSON.parse(spy.mock.calls[0][0]);
+      const metadata = loggedJson.metadata;
+      const timestamp = loggedJson.timestamp;
+
+      expect(spy).toHaveBeenCalled();
+      expect(metadata).toEqual(undefined);
+      expect(timestamp).toEqual(undefined);
+    });
+
+    it('should log the message even if the metadata has circular json', () => {
+      const spy = jest.spyOn(console, 'log');
+
+      const inputMetadata = { circular: {} };
+      inputMetadata.circular = inputMetadata;
+
+      handler.handle({
+        level: LOG_LEVEL.INFO,
         message: 'This is an info message',
-        timestamp: new Date()
+        metadata: inputMetadata
       });
 
       const loggedJson = JSON.parse(spy.mock.calls[0][0]);
       const metadata = loggedJson.metadata;
 
       expect(spy).toHaveBeenCalled();
-      expect(metadata).toEqual(undefined);
+      expect(metadata).toEqual({ circular: '[Circular]' });
     });
-
-    it('should log the message without metadata and timestamp in json format to the console', () => {
-        const spy = jest.spyOn(console, 'log');
-  
-        handler.handle({
-          level: LOG_LEVEL.INFO,
-          message: 'This is an info message',
-        });
-  
-        const loggedJson = JSON.parse(spy.mock.calls[0][0]);
-        const metadata = loggedJson.metadata;
-  
-        expect(spy).toHaveBeenCalled();
-        expect(metadata).toEqual(undefined);
-      });
   });
 });

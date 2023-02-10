@@ -12,7 +12,8 @@ Our library also provides the flexibility to extend its functionality through cu
 ## Features :star:
 
 - Supports logging at five different levels (:bug: DEBUG, :information_source: INFO, :warning: WARN, :exclamation: ERROR, :fire: FATAL).
-- Ability to add custom log handlers to extend the functionality of the library. 💬
+- Support for custom log handlers to extend the functionality of the library. 💬
+- Support console and json log handlers out of the box. 📦
 - Ability to decorate class methods to log their arguments, return values, and execution time. 📊
 - Option to include timestamps in logs. 🕰️
 - Option to set log level threshold. 🎛️
