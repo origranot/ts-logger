@@ -86,7 +86,7 @@ example.exampleMethod(1, 2);
 - executionTime (Boolean): Whether to calculate and print the function execution time.
   (default: false)
 
-## Log handlers
+### Log handlers
 
 The library allows you to add custom log handlers to extend the functionality of the
 library. A log handler is a simple class that implements a handle method that takes in a
