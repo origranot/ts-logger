@@ -12,7 +12,9 @@ Our library also provides the flexibility to extend its functionality through cu
 ## Features :star:
 
 - Supports logging at five different levels (:bug: DEBUG, :information_source: INFO, :warning: WARN, :exclamation: ERROR, :fire: FATAL).
-- Ability to add custom log handlers to extend the functionality of the library. 💬
+- Zero dependencies 🚫
+- Support for custom log handlers to extend the functionality of the library. 💬
+- Support console and json log handlers out of the box. 📦
 - Ability to decorate class methods to log their arguments, return values, and execution time. 📊
 - Option to include timestamps in logs. 🕰️
 - Option to set log level threshold. 🎛️
@@ -86,7 +88,7 @@ example.exampleMethod(1, 2);
 - executionTime (Boolean): Whether to calculate and print the function execution time.
   (default: false)
 
-## Log handlers
+### Log handlers
 
 The library allows you to add custom log handlers to extend the functionality of the
 library. A log handler is a simple class that implements a handle method that takes in a
