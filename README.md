@@ -60,7 +60,7 @@ logger.info('You can also pass variables', {
 - timeStamps (Boolean): Whether to include timestamps in logs (default: false).
 - threshold (LOG_LEVEL): The log level threshold, logs with a lower level than the
   threshold will be ignored (default: 'DEBUG').
-- handlers: Array of handlers to process and log the data. (default: [ConsoleHandler])
+- handlers: Array of handlers to process and log the data. (default: ConsoleHandler)
 
 ### Decorated functions example
 
@@ -105,13 +105,13 @@ This library provides a few built-in log handlers that can be used out of the bo
 Here's an example of how to use the built-in log handlers:
 
 ```typescript
-import { Logger, ConsoleHandler, FileHandler, JSONHandler } from '@origranot/ts-logger';
+import { Logger, ConsoleHandler, FileHandler, JsonHandler } from '@origranot/ts-logger';
 
 // Create an instance of the console logger
 const consoleHandler = new ConsoleHandler();
 
 // Create an instance of the JSON logger
-const jsonHandler = new JSONHandler();
+const jsonHandler = new JsonHandler();
 
 /*
   Note: The file handler will create the file if it doesn't exist, and append to it if it does.
@@ -126,7 +126,7 @@ const logger = new Logger({
 });
 
 /*
-  Log messages will be handled by all three handlers.
+  Log messages will be handled by all three handlers:
   - The console handler will output the log message to the console.
   - The JSON handler will output the log message to the console in JSON format.
   - The file handler will write the log message to the file.
