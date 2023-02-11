@@ -1,12 +1,14 @@
-export const stringify = (obj: Object) => {
+export const stringify = (obj: Object, space?: number) => {
   const seen = new Set();
   return JSON.stringify(obj, function (key, val) {
-    if (val && typeof val === 'object') {
-      if (seen.has(val)) {
-        return '[Circular]';
+      if (val && typeof val === 'object') {
+        if (seen.has(val)) {
+          return '[Circular]';
+        }
+        seen.add(val);
       }
-      seen.add(val);
-    }
-    return val;
-  });
+      return val;
+    },
+    space || undefined
+  );
 };

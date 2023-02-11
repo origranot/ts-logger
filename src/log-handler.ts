@@ -9,6 +9,6 @@ export interface HandlerPayload {
   timestamp?: Date;
 }
 
-export abstract class LogHandler {
-  abstract handle(payload: HandlerPayload): void;
+export interface LogHandler {
+  handle(payload: HandlerPayload): void;
 }

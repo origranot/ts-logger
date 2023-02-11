@@ -1,7 +1,7 @@
 import { HandlerPayload, LogHandler } from '../log-handler';
 import { getTimeStamp, stringify } from '../utils';
 
-export class JsonHandler extends LogHandler {
+export class JsonHandler implements LogHandler {
   handle(payload: HandlerPayload): void {
     const { timestamp } = payload;
     const logData = {
