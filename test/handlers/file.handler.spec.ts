@@ -22,7 +22,7 @@ describe('FileHandler', () => {
     const payload: HandlerPayload = { level: LOG_LEVEL.INFO, message: 'hello world' };
     fileHandler.handle(payload);
     const log = readFileSync(path, 'utf-8');
-    expect(log).toEqual('[INFO] hello world');
+    expect(log).toEqual('[INFO] hello world\n');
   });
 
   it('should add timestamp to logs if provided', () => {
@@ -34,7 +34,7 @@ describe('FileHandler', () => {
     };
     fileHandler.handle(payload);
     const log = readFileSync(path, 'utf-8');
-    expect(log).toEqual(`[${getTimeStamp(timestamp)}] [INFO] hello world`);
+    expect(log).toEqual(`[${getTimeStamp(timestamp)}] [INFO] hello world\n`);
   });
 
   it('should add metadata to logs if provided', () => {
