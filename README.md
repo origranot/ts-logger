@@ -60,7 +60,7 @@ logger.info('You can also pass variables', {
 - timeStamps (Boolean): Whether to include timestamps in logs (default: false).
 - threshold (LOG_LEVEL): The log level threshold, logs with a lower level than the
   threshold will be ignored (default: 'DEBUG').
-- handlers: Array of handlers to process and log the data. (default: [ConsoleHandler])
+- handlers: Array of handlers to process and log the data. (default: ConsoleHandler)
 
 ### Decorated functions example
 
