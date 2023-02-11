@@ -41,8 +41,8 @@ export class FileHandler implements LogHandler {
 
     let log = '';
     log += timestamp ? `[${getTimeStamp(timestamp)}] ` : '';
-    log += `[${level}] ${message}`;
-    log += metadata ? `\n${stringify(metadata, 2)}\n` : '';
+    log += `[${level}] ${message}\n`;
+    log += metadata ? `${stringify(metadata, 2)}\n` : '';
 
     writeFileSync(filePath, log, { flag: 'a' });
   }
