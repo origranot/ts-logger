@@ -1,3 +1,5 @@
+import { JsonTransport } from './../src/transports/json.transport';
+import { FileTransport } from './../src/transports/file.transport';
 import { ConsoleTransport } from './../src/transports/console.transport';
 import { Logger, LOG_LEVEL } from '../src';
 
@@ -33,6 +35,21 @@ describe('Logger', () => {
     // Default transports array should be an array with a ConsoleTransport instance in it
     expect(logger['options'].transports).toHaveLength(1);
     expect(logger['options'].transports![0]).toBeInstanceOf(ConsoleTransport);
+  });
+
+  it('should create a logger with array of transports', () => {
+    logger = new Logger({
+      transports: [new JsonTransport(), new ConsoleTransport()]
+    });
+    
+    expect(logger).toBeDefined();
+
+    // Default log level threshold should be DEBUG
+    expect(logger['options'].threshold).toBe(LOG_LEVEL.DEBUG);
+
+    expect(logger['options'].transports).toHaveLength(2);
+    expect(logger['options'].transports![0]).toBeInstanceOf(JsonTransport);
+    expect(logger['options'].transports![1]).toBeInstanceOf(ConsoleTransport);
   });
 
   describe('log', () => {

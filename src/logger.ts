@@ -20,12 +20,11 @@ export interface LogOptions {
 
 export class Logger {
   constructor(loggerOptions?: LoggerOptions) {
-    this.options = loggerOptions || {
-      threshold: LOG_LEVEL.DEBUG
-    };
+    this.options = loggerOptions || {};
 
     // Default timestamp to be true if not provided
     this.options.timeStamps = this.options.timeStamps === undefined ? true : this.options.timeStamps;
+    this.options.threshold = this.options.threshold || LOG_LEVEL.DEBUG;
     this.options.transports = this.options.transports || [new ConsoleTransport()];
   }
 
