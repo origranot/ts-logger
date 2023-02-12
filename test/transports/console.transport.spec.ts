@@ -1,6 +1,6 @@
 import { LOG_LEVEL, Transport, ConsoleTransport } from '../../src';
 
-describe('Console Transport', () => {
+describe('ConsoleTransport', () => {
   let transport: Transport;
 
   beforeEach(() => {

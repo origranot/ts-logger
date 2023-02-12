@@ -3,7 +3,7 @@ import { unlinkSync, readFileSync, mkdirSync, rmSync, existsSync } from 'fs';
 import { join } from 'path';
 import { getTimeStamp } from '../../src/utils';
 
-describe('File Transport', () => {
+describe('FileTransport', () => {
   const path = 'test/logs';
   const options = { path };
   let fileTransport = new FileTransport(options);
