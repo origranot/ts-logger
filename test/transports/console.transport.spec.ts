@@ -1,10 +1,10 @@
-import { ConsoleHandler, LogHandler, LOG_LEVEL } from '../../src';
+import { LOG_LEVEL, Transport, ConsoleTransport } from '../../src';
 
-describe('Console Handler', () => {
-  let handler: LogHandler;
+describe('Console Transport', () => {
+  let transport: Transport;
 
   beforeEach(() => {
-    handler = new ConsoleHandler();
+    transport = new ConsoleTransport();
   });
 
   afterEach(() => {
@@ -14,7 +14,7 @@ describe('Console Handler', () => {
   describe('handle', () => {
     it('should log the message to the console', () => {
       const spy = jest.spyOn(console, 'log');
-      handler.handle({
+      transport.handle({
         level: LOG_LEVEL.DEBUG,
         message: 'This is a debug message',
         timestamp: new Date()
@@ -26,7 +26,7 @@ describe('Console Handler', () => {
       const spy = jest.spyOn(console, 'log');
       const inputMetadata = { foo: 'bar' };
 
-      handler.handle({
+      transport.handle({
         level: LOG_LEVEL.INFO,
         message: 'This is an info message',
         metadata: inputMetadata,
@@ -42,7 +42,7 @@ describe('Console Handler', () => {
     it('should not console log the the metadata as second argument', () => {
       const spy = jest.spyOn(console, 'log');
 
-      handler.handle({
+      transport.handle({
         level: LOG_LEVEL.INFO,
         message: 'This is an info message',
         timestamp: new Date()

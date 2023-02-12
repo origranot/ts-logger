@@ -1,11 +1,11 @@
+import { ConsoleTransport } from './transports/console.transport';
 import { LOG_LEVEL } from './enums';
-import { LogHandler } from './log-handler';
-import { ConsoleHandler } from './handlers';
+import { Transport } from './transport';
 
 export interface LoggerOptions {
   timeStamps?: boolean;
   threshold?: LOG_LEVEL;
-  handlers?: LogHandler[];
+  transports?: Transport[];
 }
 
 export interface DecoratorOptions {
@@ -20,11 +20,12 @@ export interface LogOptions {
 
 export class Logger {
   constructor(loggerOptions?: LoggerOptions) {
-    this.options = loggerOptions || {
-      threshold: LOG_LEVEL.DEBUG
-    };
+    this.options = loggerOptions || {};
 
-    this.options.handlers = this.options.handlers || [new ConsoleHandler()];
+    // Default timestamp to be true if not provided
+    this.options.timeStamps = this.options.timeStamps === undefined ? true : this.options.timeStamps;
+    this.options.threshold = this.options.threshold || LOG_LEVEL.DEBUG;
+    this.options.transports = this.options.transports || [new ConsoleTransport()];
   }
 
   private options: LoggerOptions;
@@ -34,8 +35,8 @@ export class Logger {
       return;
     }
 
-    for (const handler of this.options.handlers!) {
-      handler.handle({
+    for (const transport of this.options.transports!) {
+      transport.handle({
         level,
         message,
         metadata: options?.metadata,

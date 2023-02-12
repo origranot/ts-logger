@@ -1,10 +1,11 @@
-import { JsonHandler, LOG_LEVEL } from '../../src';
+import { Transport } from './../../src/transport';
+import { JsonTransport, LOG_LEVEL } from '../../src';
 
-describe('Json Handler', () => {
-  let handler: JsonHandler;
+describe('Json Transport', () => {
+  let transport: Transport;
 
   beforeEach(() => {
-    handler = new JsonHandler();
+    transport = new JsonTransport();
   });
 
   afterEach(() => {
@@ -14,7 +15,7 @@ describe('Json Handler', () => {
   describe('handle', () => {
     it('should log the message in json format to the console', () => {
       const spy = jest.spyOn(console, 'log');
-      handler.handle({
+      transport.handle({
         level: LOG_LEVEL.DEBUG,
         message: 'This is a debug message',
         timestamp: new Date()
@@ -27,7 +28,7 @@ describe('Json Handler', () => {
       const spy = jest.spyOn(console, 'log');
       const inputMetadata = { foo: 'bar' };
 
-      handler.handle({
+      transport.handle({
         level: LOG_LEVEL.INFO,
         message: 'This is an info message',
         metadata: inputMetadata,
@@ -44,7 +45,7 @@ describe('Json Handler', () => {
     it('should log the message without metadata and timestamp in json format to the console', () => {
       const spy = jest.spyOn(console, 'log');
 
-      handler.handle({
+      transport.handle({
         level: LOG_LEVEL.INFO,
         message: 'This is an info message'
       });
@@ -64,7 +65,7 @@ describe('Json Handler', () => {
       const inputMetadata = { circular: {} };
       inputMetadata.circular = inputMetadata;
 
-      handler.handle({
+      transport.handle({
         level: LOG_LEVEL.INFO,
         message: 'This is an info message',
         metadata: inputMetadata

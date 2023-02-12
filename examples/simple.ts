@@ -1,6 +1,6 @@
 import { Logger, LOG_LEVEL } from '../src';
 
-const logger = new Logger({ timeStamps: true });
+const logger = new Logger();
 
 class Calculator {
   @logger.decorate(LOG_LEVEL.INFO, { executionTime: true })

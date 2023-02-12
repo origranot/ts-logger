@@ -1,8 +1,8 @@
 import { COLOR, LOG_LEVEL } from '../enums';
-import { HandlerPayload, LogHandler } from '../log-handler';
+import { Transport, TransportPayload } from './../transport';
 import { colorize, getTimeStamp } from '../utils';
 
-export class ConsoleHandler implements LogHandler {
+export class ConsoleTransport implements Transport {
   private LOG_LEVEL_COLORS = {
     [LOG_LEVEL.DEBUG]: COLOR.BLUE,
     [LOG_LEVEL.INFO]: COLOR.GREEN,
@@ -11,7 +11,7 @@ export class ConsoleHandler implements LogHandler {
     [LOG_LEVEL.FATAL]: COLOR.WHITE
   };
 
-  handle({ level, message, metadata, timestamp }: HandlerPayload): void {
+  handle({ level, message, metadata, timestamp }: TransportPayload): void {
     let prefix: string = '';
     prefix += timestamp ? `[${getTimeStamp(timestamp)}] ` : '';
     prefix += `${colorize(this.LOG_LEVEL_COLORS[level], level)}`;
