@@ -37,9 +37,7 @@ cluttered and unorganized logs and get started with ts-logger today!💪
 ```typescript
 import { Logger } from '@origranot/ts-logger';
 
-const logger = new Logger({
-  timeStamps: true
-});
+const logger = new Logger();
 
 logger.debug('Debug message');
 logger.info('Info message');
@@ -56,7 +54,7 @@ logger.info('You can also pass variables', {
 
 ### Optional parameters
 
-- timeStamps (Boolean): Whether to include timestamps in logs (default: false).
+- timeStamps (Boolean): Whether to include timestamps in logs (default: true).
 - threshold (LOG_LEVEL): The log level threshold, logs with a lower level than the
   threshold will be ignored (default: 'DEBUG').
 - transports: Array of transports to process and log the data. (default: ConsoleTransport)
@@ -66,7 +64,7 @@ logger.info('You can also pass variables', {
 ```typescript
 import { Logger, LOG_LEVEL } from '@origranot/ts-logger';
 
-const logger = new Logger({ timeStamps: true });
+const logger = new Logger();
 
 class ExampleClass {
   @logger.decorate(LOG_LEVEL.INFO, { executionTime: true })
@@ -120,7 +118,6 @@ const jsonTransport = new JsonTransport();
 const fileTransport = new FileTransport({ path: 'logs/app.log'});
 
 const logger = new Logger({
-  timeStamps: true
   transports: [consoleTransport, jsonTransport, fileTransport]
 });
 

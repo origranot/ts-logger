@@ -5,7 +5,7 @@ describe('Logger', () => {
   let logger: Logger;
 
   beforeEach(() => {
-    logger = new Logger();
+    logger = new Logger({ timeStamps: false });
   });
 
   afterEach(() => {

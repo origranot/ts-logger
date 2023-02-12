@@ -24,6 +24,8 @@ export class Logger {
       threshold: LOG_LEVEL.DEBUG
     };
 
+    // Default timestamp to be true if not provided
+    this.options.timeStamps = this.options.timeStamps === undefined ? true : this.options.timeStamps;
     this.options.transports = this.options.transports || [new ConsoleTransport()];
   }
 
