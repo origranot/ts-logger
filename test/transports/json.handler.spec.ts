@@ -1,7 +1,7 @@
 import { Transport } from './../../src/transport';
 import { JsonTransport, LOG_LEVEL } from '../../src';
 
-describe('Json Transport', () => {
+describe('JsonTransport', () => {
   let transport: Transport;
 
   beforeEach(() => {

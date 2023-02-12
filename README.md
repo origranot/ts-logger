@@ -18,7 +18,7 @@ cluttered and unorganized logs and get started with ts-logger today!💪
   :warning: WARN, :exclamation: ERROR, :fire: FATAL).
 - Zero dependencies 🚫
 - Support for custom log transports to extend the functionality of the library. 💬
-- Support console, json and file transports out of the box. 📦
+- Support multiple log transports out of the box. 📦 (Console, UDP, File, JSON)
 - Ability to decorate class methods to log their arguments, return values, and execution
   time. 📊
 - Option to include timestamps in logs. 🕰️
@@ -95,6 +95,7 @@ example.exampleMethod(1, 2);
 This library provides a few built-in log transports that can be used out of the box:
 
 - Console: This transport outputs log messages to the console.
+- Udp: this transport sends log messages to a UDP server.
 - File: This transport writes log messages to a file on disk.
 - JSON: This transport outputs log messages in JSON format, which can be easily
   processed by other systems.
@@ -129,8 +130,10 @@ const logger = new Logger({
 */
 logger.info('Application started');
 ```
+> **Note:** There is an example project in the examples directory that demonstrates how to use
+the built-in UDP transport to send log messages to Splunk.
 
-Note that you can add multiple transports to a single logger, so that log messages can be
+You can add multiple transports to a single logger, so that log messages can be
 sent to multiple outputs. You can also create custom log transports by implementing the
 ```Transport``` interface as shown below:
 
