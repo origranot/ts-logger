@@ -1,23 +1,23 @@
-import { HandlerPayload, LogHandler } from '../log-handler';
+import { Transport, TransportPayload } from './../transport';
 import { getTimeStamp, stringify } from '../utils';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
 
 type LOG_ROTATION = 'daily' | 'weekly' | 'monthly';
 
-export interface FileHandlerOptions {
+export interface FileTransportOptions {
   path: string;
   logRotation?: LOG_ROTATION;
 }
 
-export class FileHandler implements LogHandler {
-  constructor(options: FileHandlerOptions) {
+export class FileTransport implements Transport {
+  constructor(options: FileTransportOptions) {
     this.options = options;
   }
 
-  private options: FileHandlerOptions;
+  private options: FileTransportOptions;
 
-  handle({ level, message, metadata, timestamp }: HandlerPayload): void {
+  handle({ level, message, metadata, timestamp }: TransportPayload): void {
     let filePath = this.options.path;
 
     if (this.options.logRotation) {

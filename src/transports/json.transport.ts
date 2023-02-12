@@ -1,8 +1,8 @@
-import { HandlerPayload, LogHandler } from '../log-handler';
+import { Transport, TransportPayload } from './../transport';
 import { getTimeStamp, stringify } from '../utils';
 
-export class JsonHandler implements LogHandler {
-  handle(payload: HandlerPayload): void {
+export class JsonTransport implements Transport {
+  handle(payload: TransportPayload): void {
     const { timestamp } = payload;
     const logData = {
       ...payload,

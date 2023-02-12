@@ -1,6 +1,6 @@
 import { LOG_LEVEL } from './enums';
 
-export interface HandlerPayload {
+export interface TransportPayload {
   level: LOG_LEVEL;
   message: string;
   metadata?: {
@@ -9,6 +9,6 @@ export interface HandlerPayload {
   timestamp?: Date;
 }
 
-export interface LogHandler {
-  handle(payload: HandlerPayload): void;
+export interface Transport {
+  handle(payload: TransportPayload): void;
 }
