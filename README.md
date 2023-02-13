@@ -17,8 +17,8 @@ cluttered and unorganized logs and get started with ts-logger today!💪
 - Supports logging at five different levels (:bug: DEBUG, :information_source: INFO,
   :warning: WARN, :exclamation: ERROR, :fire: FATAL).
 - Zero dependencies 🚫
-- Support for custom log transports to extend the functionality of the library. 💬
-- Support multiple log transports out of the box. 📦 (Console, UDP, File, JSON)
+- Support for custom log transports and formatters to extend the functionality of the library. 💬
+- Support multiple log transports out of the box. 📦 (Console, UDP and File)
 - Ability to decorate class methods to log their arguments, return values, and execution
   time. 📊
 - Option to include timestamps in logs. 🕰️
@@ -58,6 +58,7 @@ logger.info('You can also pass variables', {
 - threshold (LOG_LEVEL): The log level threshold, logs with a lower level than the
   threshold will be ignored (default: 'DEBUG').
 - transports: Array of transports to process and log the data. (default: ConsoleTransport)
+- formatter: An instance of a formatter to format the log message. (default: SimpleFormatter)
 
 ### Decorated functions example
 
@@ -97,19 +98,14 @@ This library provides a few built-in log transports that can be used out of the 
 - **Console:** This transport outputs log messages to the console.
 - **Udp:** this transport sends log messages to a UDP server.
 - **File:** This transport writes log messages to a file on disk.
-- **JSON:** This transport outputs log messages in JSON format, which can be easily
-  processed by other systems.
 
 Here's an example of how to use the built-in log transports:
 
 ```typescript
-import { Logger, ConsoleTransport, FileTransport, JsonTransport } from '@origranot/ts-logger';
+import { Logger, ConsoleTransport, FileTransport } from '@origranot/ts-logger';
 
 // Create an instance of the console logger
 const consoleTransport = new ConsoleTransport();
-
-// Create an instance of the JSON logger
-const jsonTransport = new JsonTransport();
 
 /*
   Note: The file transport will create the file if it doesn't exist, and append to it if it does.
@@ -119,18 +115,17 @@ const jsonTransport = new JsonTransport();
 const fileTransport = new FileTransport({ path: 'logs/app.log'});
 
 const logger = new Logger({
-  transports: [consoleTransport, jsonTransport, fileTransport]
+  transports: [consoleTransport, fileTransport]
 });
 
 /*
-  Log messages will be handled by all three transports:
+  Log messages will be handled by both transports provided:
   - The console transport will output the log message to the console.
-  - The JSON transport will output the log message to the console in JSON format.
   - The file transport will write the log message to the file.
 */
 logger.info('Application started');
 ```
-> **Note:** There is an example project in the examples directory that demonstrates how to use
+> **Note:** There is a file in the examples directory that demonstrates how to use
 the built-in UDP transport to send log messages to Splunk.
 
 You can add multiple transports to a single logger, so that log messages can be
