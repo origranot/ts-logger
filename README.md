@@ -17,7 +17,7 @@ cluttered and unorganized logs and get started with ts-logger today!💪
 - Supports logging at five different levels (:bug: DEBUG, :information_source: INFO,
   :warning: WARN, :exclamation: ERROR, :fire: FATAL).
 - Zero dependencies 🚫
-- Support for custom log transports and formatters to extend the functionality of the library. 💬
+- Support custom transports and formatters to extend the functionality of the library. 💬
 - Support multiple log transports out of the box. 📦 (Console, UDP and File)
 - Ability to decorate class methods to log their arguments, return values, and execution
   time. 📊
