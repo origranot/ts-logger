@@ -78,7 +78,8 @@ const example = new ExampleClass();
 example.exampleMethod(1, 2);
 
 /* 
-  Output: [2022-01-01 00:00:00] [exampleMethod] {
+  Output: [2022-01-01 00:00:00] [exampleMethod]
+  {
     args: [1, 2],
     returns: 3,
     executionTime: 3ms
