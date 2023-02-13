@@ -1,5 +1,4 @@
-import { Transport, TransportPayload } from './../transport';
-import { getTimeStamp, stringify } from '../utils';
+import { Transport, TransportPayload } from '../interfaces/transport';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
 
@@ -17,7 +16,7 @@ export class FileTransport implements Transport {
 
   private options: FileTransportOptions;
 
-  handle({ level, message, metadata, timestamp }: TransportPayload): void {
+  handle({ message }: TransportPayload): void {
     let filePath = this.options.path;
 
     if (this.options.logRotation) {
@@ -39,11 +38,6 @@ export class FileTransport implements Transport {
       }
     }
 
-    let log = '';
-    log += timestamp ? `[${getTimeStamp(timestamp)}] ` : '';
-    log += `[${level}] ${message}\n`;
-    log += metadata ? `${stringify(metadata, 2)}\n` : '';
-
-    writeFileSync(filePath, log, { flag: 'a' });
+    writeFileSync(filePath, `${message}\n`, { flag: 'a' });
   }
 }

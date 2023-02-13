@@ -1,10 +1,12 @@
 import { ConsoleTransport } from './transports/console.transport';
 import { LOG_LEVEL } from './enums';
-import { Transport } from './transport';
+import { Transport, Formatter } from './interfaces';
+import { SimpleFormatter } from './formatters';
 
 export interface LoggerOptions {
   timeStamps?: boolean;
   threshold?: LOG_LEVEL;
+  formatter?: Formatter;
   transports?: Transport[];
 }
 
@@ -26,6 +28,7 @@ export class Logger {
     this.options.timeStamps = this.options.timeStamps === undefined ? true : this.options.timeStamps;
     this.options.threshold = this.options.threshold || LOG_LEVEL.DEBUG;
     this.options.transports = this.options.transports || [new ConsoleTransport()];
+    this.options.formatter = this.options.formatter || new SimpleFormatter();
   }
 
   private options: LoggerOptions;
@@ -35,13 +38,15 @@ export class Logger {
       return;
     }
 
+    const formattedLog = this.options.formatter!.format({
+      level,
+      message,
+      metadata: options?.metadata,
+      timestamp: this.options.timeStamps ? new Date() : undefined
+    });
+
     for (const transport of this.options.transports!) {
-      transport.handle({
-        level,
-        message,
-        metadata: options?.metadata,
-        timestamp: this.options.timeStamps ? new Date() : undefined
-      });
+      transport.handle({ message: formattedLog });
     }
   }
 

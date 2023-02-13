@@ -1,13 +1,14 @@
-import { Transport, TransportPayload } from './../transport';
+import { Formatter, FormatterPayload } from '../interfaces';
 import { getTimeStamp, stringify } from '../utils';
 
-export class JsonTransport implements Transport {
-  handle(payload: TransportPayload): void {
+export class JsonFormatter implements Formatter {
+  format(payload: FormatterPayload): string {
     const { timestamp } = payload;
     const logData = {
       ...payload,
       ...(timestamp && { timestamp: getTimeStamp(timestamp) })
     };
-    console.log(stringify(logData));
+
+    return stringify(logData);
   }
 }

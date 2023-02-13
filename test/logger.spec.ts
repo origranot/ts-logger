@@ -1,7 +1,5 @@
-import { JsonTransport } from './../src/transports/json.transport';
-import { FileTransport } from './../src/transports/file.transport';
 import { ConsoleTransport } from './../src/transports/console.transport';
-import { Logger, LOG_LEVEL } from '../src';
+import { FileTransport, Logger, LOG_LEVEL, SimpleFormatter } from '../src';
 
 describe('Logger', () => {
   let logger: Logger;
@@ -35,20 +33,23 @@ describe('Logger', () => {
     // Default transports array should be an array with a ConsoleTransport instance in it
     expect(logger['options'].transports).toHaveLength(1);
     expect(logger['options'].transports![0]).toBeInstanceOf(ConsoleTransport);
+
+    // Default formatter should be a SimpleFormatter instance
+    expect(logger['options'].formatter).toBeInstanceOf(SimpleFormatter);
   });
 
   it('should create a logger with array of transports', () => {
     logger = new Logger({
-      transports: [new JsonTransport(), new ConsoleTransport()]
+      transports: [new FileTransport({ path: 'somePath' }), new ConsoleTransport()]
     });
-    
+
     expect(logger).toBeDefined();
 
     // Default log level threshold should be DEBUG
     expect(logger['options'].threshold).toBe(LOG_LEVEL.DEBUG);
 
     expect(logger['options'].transports).toHaveLength(2);
-    expect(logger['options'].transports![0]).toBeInstanceOf(JsonTransport);
+    expect(logger['options'].transports![0]).toBeInstanceOf(FileTransport);
     expect(logger['options'].transports![1]).toBeInstanceOf(ConsoleTransport);
   });
 
@@ -112,10 +113,10 @@ describe('Logger', () => {
       const test = new TestClass();
       test.testFunction();
 
-      const messageOutput = stripAnsi(spy.mock.calls[0][0]);
-      const metadataOutput = spy.mock.calls[0][1];
+      const output = stripAnsi(spy.mock.calls[0][0]);
+      const metadataOutput = JSON.parse(output.substring(output.indexOf('\n')));
 
-      expect(messageOutput).toBe(`INFO [testFunction]`);
+      expect(output).toContain(`INFO [testFunction]`);
       expect(metadataOutput.args).toEqual([]);
       expect(metadataOutput.returns).toEqual(5);
     });
@@ -132,10 +133,10 @@ describe('Logger', () => {
       const test = new TestClass();
       test.testFunction(1, 2);
 
-      const messageOutput = stripAnsi(spy.mock.calls[0][0]);
-      const metadataOutput = spy.mock.calls[0][1];
+      const output = stripAnsi(spy.mock.calls[0][0]);
+      const metadataOutput = JSON.parse(output.substring(output.indexOf('\n')));
 
-      expect(messageOutput).toBe(`DEBUG [testFunction]`);
+      expect(output).toContain(`DEBUG [testFunction]`);
       expect(metadataOutput.args).toEqual([1, 2]);
       expect(metadataOutput.returns).toEqual(3);
     });
@@ -152,19 +153,16 @@ describe('Logger', () => {
       const test = new TestClass();
       test.testFunction(1, 2);
 
-      const messageOutput = stripAnsi(spy.mock.calls[0][0]);
-      const metadataOutput = spy.mock.calls[0][1];
+      const output = stripAnsi(spy.mock.calls[0][0]);
+      const metadataOutput = JSON.parse(output.substring(output.indexOf('\n')));
 
-      expect(messageOutput).toBe(`DEBUG [testFunction]`);
+      expect(output).toContain(`DEBUG [testFunction]`);
       expect(metadataOutput.args).toEqual([1, 2]);
       expect(metadataOutput.returns).toEqual(3);
-      expect(metadataOutput.executionTime).toBeDefined()
+      expect(metadataOutput.executionTime).toBeDefined();
     });
   });
 });
 
 const stripAnsi = (str: string) =>
-  str.replace(
-    /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
-    ''
-  );
+  str.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '');
