@@ -4,23 +4,22 @@
 ![npm bundle size](https://img.shields.io/bundlephobia/min/@origranot/ts-logger)
 ![GitHub](https://img.shields.io/github/license/origranot/ts-logger)
 
-A logging library designed to simplify the process of logging in your TypeScript
-applications. With zero dependencies and features such as five log levels, custom transports, method decoration options, timestamps, and log level thresholding, you'll have
-greater control over your log output.
+A logging library designed to simplify the process of logging in your TypeScript applications. With zero
+dependencies and features such as five log levels, custom transports, method decoration options,
+timestamps, and log level thresholding, you'll have greater control over your log output.
 
-Our library also provides the flexibility to extend its functionality through custom
-transports, enabling you to meet the specific needs of your project. Say goodbye to
-cluttered and unorganized logs and get started with ts-logger today!💪
+Our library also provides the flexibility to extend its functionality through custom transports, enabling
+you to meet the specific needs of your project. Say goodbye to cluttered and unorganized logs and get
+started with ts-logger today!💪
 
 ## Features :star:
 
-- Supports logging at five different levels (:bug: DEBUG, :information_source: INFO,
-  :warning: WARN, :exclamation: ERROR, :fire: FATAL).
+- Supports logging at five different levels (:bug: DEBUG, :information_source: INFO, :warning: WARN,
+  :exclamation: ERROR, :fire: FATAL).
 - Zero dependencies 🚫
 - Support custom transports and formatters to extend the functionality of the library. 💬
 - Support multiple log transports out of the box. 📦 (Console, UDP and File)
-- Ability to decorate class methods to log their arguments, return values, and execution
-  time. 📊
+- Ability to decorate class methods to log their arguments, return values, and execution time. 📊
 - Option to include timestamps in logs. 🕰️
 - Option to set log level threshold. 🎛️
 - Option to log execution time of decorated functions. ⏱️
@@ -45,18 +44,16 @@ logger.warn('Warn message');
 logger.error('Error message');
 logger.fatal('Fatal message');
 
-logger.info('You can also pass variables', {
-  metadata: {
-    foo: 'baz'
-  }
+logger.info('You can also log objects', {
+  foo: 'baz'
 });
 ```
 
 ### Optional parameters
 
 - timeStamps (Boolean): Whether to include timestamps in logs (default: true).
-- threshold (LOG_LEVEL): The log level threshold, logs with a lower level than the
-  threshold will be ignored (default: 'DEBUG').
+- threshold (LOG_LEVEL): The log level threshold, logs with a lower level than the threshold will be
+  ignored (default: 'DEBUG').
 - transports: Array of transports to process and log the data. (default: ConsoleTransport)
 - formatter: An instance of a formatter to format the log message. (default: SimpleFormatter)
 
@@ -89,8 +86,7 @@ example.exampleMethod(1, 2);
 
 ### Optional parameters
 
-- executionTime (Boolean): Whether to calculate and print the function execution time.
-  (default: false)
+- executionTime (Boolean): Whether to calculate and print the function execution time. (default: false)
 
 ### Log transports
 
@@ -113,7 +109,7 @@ const consoleTransport = new ConsoleTransport();
   We can also provide log rotation options to the file transport, which will automatically
   rotate the log file according to the date.
 */
-const fileTransport = new FileTransport({ path: 'logs/app.log'});
+const fileTransport = new FileTransport({ path: 'logs/app.log' });
 
 const logger = new Logger({
   transports: [consoleTransport, fileTransport]
@@ -126,12 +122,12 @@ const logger = new Logger({
 */
 logger.info('Application started');
 ```
-> **Note:** There is a file in the examples directory that demonstrates how to use
-the built-in UDP transport to send log messages to Splunk.
 
-You can add multiple transports to a single logger, so that log messages can be
-sent to multiple outputs. You can also create custom log transports by implementing the
-```Transport``` interface as shown below:
+> **Note:** There is a file in the examples directory that demonstrates how to use the built-in UDP
+> transport to send log messages to Splunk.
+
+You can add multiple transports to a single logger, so that log messages can be sent to multiple outputs.
+You can also create custom log transports by implementing the `Transport` interface as shown below:
 
 ```typescript
 import { Logger, TransportPayload } from '@origranot/ts-logger';
