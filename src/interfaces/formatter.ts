@@ -8,5 +8,4 @@ export interface FormatterPayload {
 
 export interface Formatter {
   format(payload: FormatterPayload): string;
-  parse(args: unknown[]): string | object;
 }

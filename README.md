@@ -42,7 +42,7 @@ logger.debug('Debug message');
 logger.info('Info message');
 logger.warn('Warn message');
 logger.error('Error message');
-logger.fatal('Fatal message');
+logger.fatal('Fatal message', new Error('We have a problem here'));
 
 logger.info('You can also log objects', {
   foo: 'baz'

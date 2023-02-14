@@ -1,5 +1,7 @@
 import { ConsoleTransport } from './../src/transports/console.transport';
 import { FileTransport, Logger, LOG_LEVEL, SimpleFormatter } from '../src';
+import { stringify } from '../src/utils';
+import { formatError } from '../src/formatters/utils/error-formatter';
 
 describe('Logger', () => {
   let logger: Logger;
@@ -68,6 +70,35 @@ describe('Logger', () => {
       logger.error('This is an error message', {});
       const output = stripAnsi(spy.mock.calls[0][0]);
       expect(output).toBe(`ERROR This is an error message`);
+    });
+
+    it('should log the messages with multiple args provided', () => {
+      const spy = jest.spyOn(console, 'log');
+
+      const args = ['This is an error message', 'first arg', 'second arg'];
+
+      logger.error(...args);
+      const output = stripAnsi(spy.mock.calls[0][0]);
+      expect(output).toBe(`ERROR ${args[0]}\n${args[1]}\n${args[2]}`);
+    });
+
+    it('should log the messages with multiple args provided mixed with an object', () => {
+      const spy = jest.spyOn(console, 'log');
+
+      const args = [
+        'This is an error message',
+        {
+          foo: 'bar',
+          nested: {
+            foo: 'bar'
+          }
+        },
+        'third arg'
+      ];
+
+      logger.debug(...args);
+      const output = stripAnsi(spy.mock.calls[0][0]);
+      expect(output).toBe(`DEBUG ${args[0]}\n${stringify(args[1], 2)}\n${args[2]}`);
     });
 
     describe('logLevelThreshold', () => {

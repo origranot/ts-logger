@@ -14,11 +14,13 @@ class Calculator {
   }
 
   @logger.decorate(LOG_LEVEL.WARN)
-  void() {
-    logger.warn('This is a warning from the void method!', {
+  divide(a: number, b: number) {
+    logger.warn('This is a warning from the divide method!', {
       foo: 'bar',
       baz: 'qux'
     });
+
+    return a / b;
   }
 }
 
@@ -26,4 +28,4 @@ const calculator = new Calculator();
 
 calculator.sum(1, 2);
 calculator.mul(1, 2);
-calculator.void();
+calculator.divide(10, 5);
