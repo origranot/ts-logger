@@ -12,4 +12,4 @@ const logger = new Logger({
 });
 
 logger.info('Hello World!');
-logger.info('This is an object', { metadata: { foo: 'bar' } });
+logger.info('This is an object', { foo: 'bar' });
