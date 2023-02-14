@@ -11,14 +11,14 @@ describe('SimpleFormatter', () => {
   it('should format the log message in the correct format', () => {
     const payload = {
       level: LOG_LEVEL.DEBUG,
-      message: 'This is a debug message',
+      args: ['This is a debug message'],
       timestamp: new Date()
     };
 
     const expectedMessage = `[${getTimeStamp(payload.timestamp)}] ${colorize(
       LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG],
       LOG_LEVEL.DEBUG
-    )} ${payload.message}`;
+    )} ${payload.args[0]}`;
 
     const result = formatter.format(payload);
 
@@ -28,15 +28,14 @@ describe('SimpleFormatter', () => {
   it('should format the log message with metadata if it is present', () => {
     const payload = {
       level: LOG_LEVEL.DEBUG,
-      message: 'This is a debug message',
-      metadata: { foo: 'bar' },
+      args: ['This is a debug message', { foo: 'bar' }],
       timestamp: new Date()
     };
 
     const expectedMessage = `[${getTimeStamp(payload.timestamp)}] ${colorize(
       LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG],
       LOG_LEVEL.DEBUG
-    )} ${payload.message}\n${stringify(payload.metadata, 2)}`;
+    )} ${payload.args[0]}\n${stringify(payload.args[1], 2)}`;
 
     const result = formatter.format(payload);
 
@@ -47,12 +46,29 @@ describe('SimpleFormatter', () => {
     formatter = new SimpleFormatter();
     const payload = {
       level: LOG_LEVEL.DEBUG,
-      message: 'This is a debug message'
+      args: ['This is a debug message'],
     };
 
     const expectedMessage = `${colorize(LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG], LOG_LEVEL.DEBUG)} ${
-      payload.message
+      payload.args[0]
     }`;
+
+    const result = formatter.format(payload);
+
+    expect(result).toBe(expectedMessage);
+  });
+
+  it('should format the log message if there are no args provided', () => {
+    const payload = {
+      level: LOG_LEVEL.DEBUG,
+      args: [],
+      timestamp: new Date()
+    };
+
+    const expectedMessage = `[${getTimeStamp(payload.timestamp)}] ${colorize(
+      LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG],
+      LOG_LEVEL.DEBUG
+    )}`;
 
     const result = formatter.format(payload);
 

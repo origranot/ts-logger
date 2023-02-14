@@ -14,12 +14,6 @@ export interface DecoratorOptions {
   executionTime?: boolean;
 }
 
-export interface LogOptions {
-  metadata?: {
-    [name: string]: any;
-  };
-}
-
 export class Logger {
   constructor(loggerOptions?: LoggerOptions) {
     this.options = loggerOptions || {};
@@ -33,15 +27,14 @@ export class Logger {
 
   private options: LoggerOptions;
 
-  private log(level: LOG_LEVEL, message: string, options?: LogOptions) {
+  private log(level: LOG_LEVEL, ...args: unknown[]) {
     if (level < this.options.threshold!) {
       return;
     }
 
     const formattedLog = this.options.formatter!.format({
       level,
-      message,
-      metadata: options?.metadata,
+      args,
       timestamp: this.options.timeStamps ? new Date() : undefined
     });
 
@@ -79,25 +72,25 @@ export class Logger {
           metadata.executionTime = `${end - start}ms`;
         }
 
-        this.log(level, `[${propertyKey}]`, { metadata });
+        this.log(level, `[${propertyKey}]`, { ...metadata });
         return result;
       };
     };
   }
 
-  debug(message: string, options?: LogOptions) {
-    this.log(LOG_LEVEL.DEBUG, message, options);
+  debug(...args: unknown[]) {
+    this.log(LOG_LEVEL.DEBUG, ...args);
   }
-  info(message: string, options?: LogOptions) {
-    this.log(LOG_LEVEL.INFO, message, options);
+  info(...args: unknown[]) {
+    this.log(LOG_LEVEL.INFO, ...args);
   }
-  warn(message: string, options?: LogOptions) {
-    this.log(LOG_LEVEL.WARN, message, options);
+  warn(...args: unknown[]) {
+    this.log(LOG_LEVEL.WARN, ...args);
   }
-  error(message: string, options?: LogOptions) {
-    this.log(LOG_LEVEL.ERROR, message, options);
+  error(...args: unknown[]) {
+    this.log(LOG_LEVEL.ERROR, ...args);
   }
-  fatal(message: string, options?: LogOptions) {
-    this.log(LOG_LEVEL.FATAL, message, options);
+  fatal(...args: unknown[]) {
+    this.log(LOG_LEVEL.FATAL, ...args);
   }
 }

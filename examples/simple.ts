@@ -16,10 +16,8 @@ class Calculator {
   @logger.decorate(LOG_LEVEL.WARN)
   void() {
     logger.warn('This is a warning from the void method!', {
-      metadata: {
-        foo: 'bar',
-        baz: 'qux'
-      }
+      foo: 'bar',
+      baz: 'qux'
     });
   }
 }
