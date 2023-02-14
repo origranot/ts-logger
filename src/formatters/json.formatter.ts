@@ -1,5 +1,5 @@
 import { Formatter, FormatterPayload } from '../interfaces';
-import { getTimeStamp, stringify } from '../utils';
+import { getTimeStamp, isError, stringify } from '../utils';
 
 export class JsonFormatter implements Formatter {
   format({ level, timestamp, args }: FormatterPayload): string {
@@ -18,8 +18,15 @@ export class JsonFormatter implements Formatter {
       if (typeof arg === 'object') {
         const argObject = arg as Object;
 
-        // Check if the object is empty
-        if (Object.keys(argObject).length === 0) {
+        if (isError(arg)) {
+          const error = arg as Error;
+          argString = {
+            name: error.name,
+            message: error.message,
+            stack: error.stack
+          };
+        } else if (Object.keys(argObject).length === 0) {
+          // empty object
           return acc;
         }
       }
