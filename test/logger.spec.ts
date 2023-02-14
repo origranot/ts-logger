@@ -1,7 +1,7 @@
 import { ConsoleTransport } from './../src/transports/console.transport';
 import { FileTransport, Logger, LOG_LEVEL, SimpleFormatter } from '../src';
 import { stringify } from '../src/utils';
-import { formatError } from '../src/formatters/utils/error-formater';
+import { formatError } from '../src/formatters/utils/error-formatter';
 
 describe('Logger', () => {
   let logger: Logger;
