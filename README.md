@@ -132,17 +132,22 @@ logger.info('Application started');
 - formatter: An instance of a formatter to format the log message. (default: SimpleFormatter)
 
 You can add multiple transports to a single logger, so that log messages can be sent to multiple outputs.
-You can also create custom log transports by implementing the `Transport` interface as shown below:
+You can also create custom log transports by extending the `Transport` class as shown below:
 
 ```typescript
 import { Logger, TransportPayload } from '@origranot/ts-logger';
 
-export class CustomTransport implements Transport {
+export class CustomTransport extends Transport {
+  constructor() {
+    super();
+  }
   handle(payload: TransportPayload) {
-    console.log(`[${payload.timestamp}] - ${payload.message}`);
+    console.log([`[CustomTransport] - ${payload.message}`]);
   }
 }
 ```
+
+> **Note:** You can also create custom log formatters by implementing the `Formatter` interface.
 
 ## Contributing
 
