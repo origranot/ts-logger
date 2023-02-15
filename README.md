@@ -52,8 +52,6 @@ logger.info('You can also log objects', {
 #### Optional parameters
 
 - timeStamps (Boolean): Whether to include timestamps in logs (default: true).
-- threshold (LOG_LEVEL): The log level threshold, logs with a lower level than the threshold will be
-  ignored (default: 'DEBUG').
 - transports: Array of transports to process and log the data. (default: ConsoleTransport)
 
 ### Decorated functions example
@@ -74,7 +72,7 @@ const example = new ExampleClass();
 example.exampleMethod(1, 2);
 
 /* 
-  Output: [2022-01-01 00:00:00] [exampleMethod]
+  Output: [2022-01-01 00:00:00] INFO [exampleMethod]
   {
     args: [1, 2],
     returns: 3,
@@ -130,6 +128,8 @@ logger.info('Application started');
 #### Optional parameters
 
 - formatter: An instance of a formatter to format the log message. (default: SimpleFormatter)
+- threshold: The log level threshold, logs with a lower level than the threshold will be ignored
+  (default: 'DEBUG').
 
 You can add multiple transports to a single logger, so that log messages can be sent to multiple outputs.
 You can also create custom log transports by extending the `Transport` class as shown below:
@@ -141,7 +141,7 @@ export class CustomTransport extends Transport {
   constructor() {
     super();
   }
-  
+
   handle(payload: TransportPayload) {
     console.log([`[CustomTransport] - ${payload.message}`]);
   }
