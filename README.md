@@ -141,6 +141,7 @@ export class CustomTransport extends Transport {
   constructor() {
     super();
   }
+  
   handle(payload: TransportPayload) {
     console.log([`[CustomTransport] - ${payload.message}`]);
   }
