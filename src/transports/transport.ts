@@ -11,9 +11,8 @@ export interface TransportPayload {
 
 export abstract class Transport {
   constructor(options?: TransportOptions) {
-    this.options = options || {
-      formatter: new SimpleFormatter()
-    };
+    this.options = options || {};
+    this.options.formatter = this.options.formatter || new SimpleFormatter();
   }
   public options: TransportOptions;
   abstract handle(payload: TransportPayload): void;
