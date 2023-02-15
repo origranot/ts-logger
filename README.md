@@ -55,7 +55,6 @@ logger.info('You can also log objects', {
 - threshold (LOG_LEVEL): The log level threshold, logs with a lower level than the threshold will be
   ignored (default: 'DEBUG').
 - transports: Array of transports to process and log the data. (default: ConsoleTransport)
-- formatter: An instance of a formatter to format the log message. (default: SimpleFormatter)
 
 ### Decorated functions example
 
@@ -125,6 +124,11 @@ logger.info('Application started');
 
 > **Note:** There is a file in the examples directory that demonstrates how to use the built-in UDP
 > transport to send log messages to Splunk.
+
+
+### Optional parameters
+
+- formatter: An instance of a formatter to format the log message. (default: SimpleFormatter)
 
 You can add multiple transports to a single logger, so that log messages can be sent to multiple outputs.
 You can also create custom log transports by implementing the `Transport` interface as shown below:

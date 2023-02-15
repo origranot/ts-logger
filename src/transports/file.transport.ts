@@ -1,27 +1,25 @@
-import { Transport, TransportPayload } from '../interfaces/transport';
+import { Transport, TransportOptions, TransportPayload } from './transport';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
 
 type LOG_ROTATION = 'daily' | 'weekly' | 'monthly';
 
-export interface FileTransportOptions {
+export interface FileTransportOptions extends TransportOptions {
   path: string;
   logRotation?: LOG_ROTATION;
 }
 
-export class FileTransport implements Transport {
-  constructor(options: FileTransportOptions) {
-    this.options = options;
+export class FileTransport extends Transport {
+  constructor(private readonly fileOptions: FileTransportOptions) {
+    super(fileOptions);
   }
 
-  private options: FileTransportOptions;
-
   handle({ message }: TransportPayload): void {
-    let filePath = this.options.path;
+    let filePath = this.fileOptions.path;
 
-    if (this.options.logRotation) {
+    if (this.fileOptions.logRotation) {
       const date = new Date();
-      switch (this.options.logRotation) {
+      switch (this.fileOptions.logRotation) {
         case 'daily':
           filePath = join(
             filePath,

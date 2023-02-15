@@ -1,23 +1,25 @@
-import { Transport, TransportPayload } from '../interfaces/transport';
+import { Transport, TransportOptions, TransportPayload } from './transport';
 import { createSocket, Socket } from 'dgram';
 
 export type SocketType = 'udp4' | 'udp6';
 
-export interface UdpTransportOptions {
+export interface UdpTransportOptions extends TransportOptions {
   host: string;
   port: number;
   socketType?: SocketType;
 }
 
-export class UdpTransport implements Transport {
-  constructor(private options: UdpTransportOptions) {
-    this.socket = createSocket(options.socketType || 'udp4');
+export class UdpTransport extends Transport {
+  constructor(private readonly udpOptions: UdpTransportOptions) {
+    super(udpOptions);
+
+    this.socket = createSocket(udpOptions.socketType || 'udp4');
     this.socket.unref();
   }
 
   private socket: Socket;
 
   handle({ message }: TransportPayload): void {
-    this.socket.send(message, this.options.port, this.options.host);
+    this.socket.send(message, this.udpOptions.port, this.udpOptions.host);
   }
 }

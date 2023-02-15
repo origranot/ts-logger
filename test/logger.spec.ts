@@ -1,7 +1,6 @@
 import { ConsoleTransport } from './../src/transports/console.transport';
-import { FileTransport, Logger, LOG_LEVEL, SimpleFormatter } from '../src';
+import { FileTransport, JsonFormatter, Logger, LOG_LEVEL, SimpleFormatter, UdpTransport } from '../src';
 import { stringify } from '../src/utils';
-import { formatError } from '../src/formatters/utils/error-formatter';
 
 describe('Logger', () => {
   let logger: Logger;
@@ -35,9 +34,6 @@ describe('Logger', () => {
     // Default transports array should be an array with a ConsoleTransport instance in it
     expect(logger['options'].transports).toHaveLength(1);
     expect(logger['options'].transports![0]).toBeInstanceOf(ConsoleTransport);
-
-    // Default formatter should be a SimpleFormatter instance
-    expect(logger['options'].formatter).toBeInstanceOf(SimpleFormatter);
   });
 
   it('should create a logger with array of transports', () => {
@@ -53,6 +49,31 @@ describe('Logger', () => {
     expect(logger['options'].transports).toHaveLength(2);
     expect(logger['options'].transports![0]).toBeInstanceOf(FileTransport);
     expect(logger['options'].transports![1]).toBeInstanceOf(ConsoleTransport);
+  });
+
+  it('should create a logger with multiple transports and formatters', () => {
+    logger = new Logger({
+      threshold: LOG_LEVEL.INFO,
+      transports: [
+        new ConsoleTransport(),
+        new UdpTransport({
+          host: 'localhost',
+          port: 514,
+          formatter: new JsonFormatter()
+        })
+      ]
+    });
+
+    expect(logger).toBeDefined();
+
+    // Default log level threshold should be DEBUG
+    expect(logger['options'].threshold).toBe(LOG_LEVEL.INFO);
+
+    expect(logger['options'].transports).toHaveLength(2);
+    expect(logger['options'].transports![0]).toBeInstanceOf(ConsoleTransport);
+    expect(logger['options'].transports![0].options.formatter).toBeInstanceOf(SimpleFormatter);
+    expect(logger['options'].transports![1]).toBeInstanceOf(UdpTransport);
+    expect(logger['options'].transports![1].options.formatter).toBeInstanceOf(JsonFormatter);
   });
 
   describe('log', () => {
