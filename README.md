@@ -49,7 +49,7 @@ logger.info('You can also log objects', {
 });
 ```
 
-### Optional parameters
+#### Optional parameters
 
 - timeStamps (Boolean): Whether to include timestamps in logs (default: true).
 - threshold (LOG_LEVEL): The log level threshold, logs with a lower level than the threshold will be
@@ -83,7 +83,7 @@ example.exampleMethod(1, 2);
 */
 ```
 
-### Optional parameters
+#### Optional parameters
 
 - executionTime (Boolean): Whether to calculate and print the function execution time. (default: false)
 
@@ -127,7 +127,7 @@ logger.info('Application started');
 > **Note:** There is a file in the examples directory that demonstrates how to use the built-in UDP
 > transport to send log messages to Splunk.
 
-### Optional parameters
+#### Optional parameters
 
 - formatter: An instance of a formatter to format the log message. (default: SimpleFormatter)
 
