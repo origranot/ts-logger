@@ -92,10 +92,12 @@ example.exampleMethod(1, 2);
 This library provides a few built-in log transports that can be used out of the box:
 
 - **Console:** This transport outputs log messages to the console.
-- **Udp:** this transport sends log messages to a UDP server.
+- **Udp:** this transport sends log messages via UDP protocol.
 - **File:** This transport writes log messages to a file on disk.
 
-Here's an example of how to use the built-in log transports:
+The built-in transports have a default formatter assigned to them (SimpleFormatter), but you can override
+it by passing a custom formatter to the transport constructor. Here's an example of how to use the
+built-in log transports:
 
 ```typescript
 import { Logger, ConsoleTransport, FileTransport } from '@origranot/ts-logger';
@@ -124,7 +126,6 @@ logger.info('Application started');
 
 > **Note:** There is a file in the examples directory that demonstrates how to use the built-in UDP
 > transport to send log messages to Splunk.
-
 
 ### Optional parameters
 
