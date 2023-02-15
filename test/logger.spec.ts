@@ -18,18 +18,14 @@ describe('Logger', () => {
   });
 
   it('should create a logger with the provided options', () => {
-    const threshold = LOG_LEVEL.INFO;
-    logger = new Logger({ threshold: threshold });
+    logger = new Logger({ timeStamps: false });
     expect(logger).toBeDefined();
-    expect(logger['options'].threshold).toBe(threshold);
+    expect(logger['options'].timeStamps).toBe(false);
   });
 
   it('should create a logger with default values', () => {
     logger = new Logger();
     expect(logger).toBeDefined();
-
-    // Default log level threshold should be DEBUG
-    expect(logger['options'].threshold).toBe(LOG_LEVEL.DEBUG);
 
     // Default transports array should be an array with a ConsoleTransport instance in it
     expect(logger['options'].transports).toHaveLength(1);
@@ -43,9 +39,6 @@ describe('Logger', () => {
 
     expect(logger).toBeDefined();
 
-    // Default log level threshold should be DEBUG
-    expect(logger['options'].threshold).toBe(LOG_LEVEL.DEBUG);
-
     expect(logger['options'].transports).toHaveLength(2);
     expect(logger['options'].transports![0]).toBeInstanceOf(FileTransport);
     expect(logger['options'].transports![1]).toBeInstanceOf(ConsoleTransport);
@@ -53,7 +46,6 @@ describe('Logger', () => {
 
   it('should create a logger with multiple transports and formatters', () => {
     logger = new Logger({
-      threshold: LOG_LEVEL.INFO,
       transports: [
         new ConsoleTransport(),
         new UdpTransport({
@@ -65,9 +57,6 @@ describe('Logger', () => {
     });
 
     expect(logger).toBeDefined();
-
-    // Default log level threshold should be DEBUG
-    expect(logger['options'].threshold).toBe(LOG_LEVEL.INFO);
 
     expect(logger['options'].transports).toHaveLength(2);
     expect(logger['options'].transports![0]).toBeInstanceOf(ConsoleTransport);
@@ -125,16 +114,39 @@ describe('Logger', () => {
     describe('logLevelThreshold', () => {
       it('should not log the message if the log level is below the threshold', () => {
         const spy = jest.spyOn(console, 'log');
-        logger = new Logger({ threshold: LOG_LEVEL.INFO });
+        logger = new Logger({
+          transports: [
+            new ConsoleTransport({
+              threshold: LOG_LEVEL.INFO
+            })
+          ]
+        });
         logger.debug('This is a debug message');
         expect(spy).not.toHaveBeenCalled();
       });
 
       it('should log the message if the log level is above the threshold', () => {
         const spy = jest.spyOn(console, 'log');
-        logger = new Logger({ threshold: LOG_LEVEL.DEBUG });
+        logger = new Logger();
         logger.info('This is a info message');
         expect(spy).toHaveBeenCalled();
+      });
+
+      it('should log the message only to the transports where their threshold is above', () => {
+        const spy = jest.spyOn(console, 'log');
+        logger = new Logger({
+          transports: [
+            new ConsoleTransport({
+              threshold: LOG_LEVEL.DEBUG
+            }),
+            new ConsoleTransport({
+              threshold: LOG_LEVEL.WARN
+            }),
+          ]
+        });
+        logger.info('This is a debug message');
+        expect(spy).toHaveBeenCalled();
+        expect(spy).toBeCalledTimes(1);
       });
     });
 

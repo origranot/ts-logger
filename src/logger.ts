@@ -4,7 +4,6 @@ import { Transport } from './transports';
 
 export interface LoggerOptions {
   timeStamps?: boolean;
-  threshold?: LOG_LEVEL;
   transports?: Transport[];
 }
 
@@ -18,18 +17,17 @@ export class Logger {
 
     // Default timestamp to be true if not provided
     this.options.timeStamps = this.options.timeStamps === undefined ? true : this.options.timeStamps;
-    this.options.threshold = this.options.threshold || LOG_LEVEL.DEBUG;
     this.options.transports = this.options.transports || [new ConsoleTransport()];
   }
 
   private options: LoggerOptions;
 
   private log(level: LOG_LEVEL, ...args: unknown[]) {
-    if (level < this.options.threshold!) {
-      return;
-    }
-
     for (const transport of this.options.transports!) {
+      if (level < transport.options.threshold!) {
+        return;
+      }
+
       const formattedLog = transport.options.formatter!.format({
         level,
         args,
