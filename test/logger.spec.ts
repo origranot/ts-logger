@@ -131,6 +131,23 @@ describe('Logger', () => {
         logger.info('This is a info message');
         expect(spy).toHaveBeenCalled();
       });
+
+      it('should log the message only to the transports where their threshold is above', () => {
+        const spy = jest.spyOn(console, 'log');
+        logger = new Logger({
+          transports: [
+            new ConsoleTransport({
+              threshold: LOG_LEVEL.DEBUG
+            }),
+            new ConsoleTransport({
+              threshold: LOG_LEVEL.WARN
+            }),
+          ]
+        });
+        logger.info('This is a debug message');
+        expect(spy).toHaveBeenCalled();
+        expect(spy).toBeCalledTimes(1);
+      });
     });
 
     describe('timeStamps', () => {
