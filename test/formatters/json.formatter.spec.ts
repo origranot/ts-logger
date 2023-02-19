@@ -36,7 +36,7 @@ describe('JsonFormatter', () => {
     const expectedOutput = stringify({
       level: payload.level,
       0: payload.args[0],
-      1: payload.args[1],
+      1: payload.args[1]
     });
     const output = formatter.format(payload);
 
@@ -53,7 +53,7 @@ describe('JsonFormatter', () => {
       level: payload.level,
       0: payload.args[0],
       1: payload.args[1],
-      2: payload.args[2],
+      2: payload.args[2]
     });
     const output = formatter.format(payload);
 
@@ -67,7 +67,29 @@ describe('JsonFormatter', () => {
     };
 
     const expectedOutput = stringify({
+      level: payload.level
+    });
+    const output = formatter.format(payload);
+
+    expect(output).toEqual(expectedOutput);
+  });
+
+  it('should format if there is a circular object', () => {
+    const circularObject = {
+      foo: 'bar',
+      circular: {}
+    };
+    circularObject.circular = circularObject;
+
+    const payload: FormatterPayload = {
+      level: LOG_LEVEL.DEBUG,
+      args: ['This is another test log', circularObject]
+    };
+
+    const expectedOutput = stringify({
       level: payload.level,
+      0: payload.args[0],
+      1: { foo: 'bar', circular: '[Circular]' }
     });
     const output = formatter.format(payload);
 
