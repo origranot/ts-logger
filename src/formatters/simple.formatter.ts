@@ -1,12 +1,12 @@
 import { Formatter, FormatterPayload } from '../interfaces';
-import { colorize, getTimeStamp, isError, LOG_LEVEL_COLORS, stringify } from '../utils';
+import { colorize, getTimeStamp, isError, DEFAULT_LOG_LEVEL_COLORS, stringify } from '../utils';
 import { formatError } from './utils/error-formatter';
 
 export class SimpleFormatter implements Formatter {
   format({ level, args, timestamp }: FormatterPayload): string {
     let prefix: string = '';
     prefix += timestamp ? `[${getTimeStamp(timestamp)}] ` : '';
-    prefix += `${colorize(LOG_LEVEL_COLORS[level], level)}`;
+    prefix += `${colorize(DEFAULT_LOG_LEVEL_COLORS[level], level)}`;
 
     const message = this.parse(args);
 

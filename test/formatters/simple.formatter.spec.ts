@@ -1,5 +1,6 @@
 import { LOG_LEVEL, SimpleFormatter } from '../../src';
-import { colorize, getTimeStamp, LOG_LEVEL_COLORS, stringify } from '../../src/utils';
+import { formatError } from '../../src/formatters/utils/error-formatter';
+import { colorize, getTimeStamp, DEFAULT_LOG_LEVEL_COLORS, stringify } from '../../src/utils';
 
 describe('SimpleFormatter', () => {
   let formatter: SimpleFormatter;
@@ -16,7 +17,7 @@ describe('SimpleFormatter', () => {
     };
 
     const expectedMessage = `[${getTimeStamp(payload.timestamp)}] ${colorize(
-      LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG],
+      DEFAULT_LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG],
       LOG_LEVEL.DEBUG
     )} ${payload.args[0]}`;
 
@@ -25,7 +26,7 @@ describe('SimpleFormatter', () => {
     expect(result).toBe(expectedMessage);
   });
 
-  it('should format the log message with metadata if it is present', () => {
+  it('should format the log message with objects', () => {
     const payload = {
       level: LOG_LEVEL.DEBUG,
       args: ['This is a debug message', { foo: 'bar' }],
@@ -33,7 +34,7 @@ describe('SimpleFormatter', () => {
     };
 
     const expectedMessage = `[${getTimeStamp(payload.timestamp)}] ${colorize(
-      LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG],
+      DEFAULT_LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG],
       LOG_LEVEL.DEBUG
     )} ${payload.args[0]}\n${stringify(payload.args[1], 2)}`;
 
@@ -46,10 +47,10 @@ describe('SimpleFormatter', () => {
     formatter = new SimpleFormatter();
     const payload = {
       level: LOG_LEVEL.DEBUG,
-      args: ['This is a debug message'],
+      args: ['This is a debug message']
     };
 
-    const expectedMessage = `${colorize(LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG], LOG_LEVEL.DEBUG)} ${
+    const expectedMessage = `${colorize(DEFAULT_LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG], LOG_LEVEL.DEBUG)} ${
       payload.args[0]
     }`;
 
@@ -66,9 +67,26 @@ describe('SimpleFormatter', () => {
     };
 
     const expectedMessage = `[${getTimeStamp(payload.timestamp)}] ${colorize(
-      LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG],
+      DEFAULT_LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG],
       LOG_LEVEL.DEBUG
     )}`;
+
+    const result = formatter.format(payload);
+
+    expect(result).toBe(expectedMessage);
+  });
+
+  it('should format the log message if there is an error', () => {
+    const payload = {
+      level: LOG_LEVEL.DEBUG,
+      args: ['This is a debug message', new Error('This is an error')],
+      timestamp: new Date()
+    };
+
+    const expectedMessage = `[${getTimeStamp(payload.timestamp)}] ${colorize(
+      DEFAULT_LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG],
+      LOG_LEVEL.DEBUG
+    )} ${payload.args[0]}\n${formatError(payload.args[1] as Error)}`;
 
     const result = formatter.format(payload);
 
