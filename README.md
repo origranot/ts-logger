@@ -51,8 +51,38 @@ logger.info('You can also log objects', {
 
 #### Optional parameters
 
-- timeStamps (Boolean): Whether to include timestamps in logs (default: true).
+- timeStamps (Boolean): Whether to include timestamps in logs (default: true)
 - transports: Array of transports to process and log the data. (default: ConsoleTransport)
+- override: Override default options (see below)
+
+#### Override default options
+
+- logLevelColors: override and customize the default log level colors. 
+
+  You can see the default log level colors in the table below:
+
+  | LOG_LEVEL | COLOR     |
+  | --------- | --------- |
+  | DEBUG     | 🔵 BLUE   |
+  | INFO      | 🟢 GREEN  |
+  | WARN      | 🟡 YELLOW |
+  | ERROR     | 🔴 RED    |
+  | FATAL     | ⚪ WHITE  |
+
+  The `logLevelColors` object is a map of the `LOG_LEVEL` enum to the `COLOR` enum.
+  > **Note:** You can find the `COLOR` enum in the `src/utils/color.ts` file.
+
+  For example, to override the default color of the `DEBUG` log level to `YELLOW` we can do the following:
+  
+  ```typescript
+  const logger = new Logger({
+    override: {
+      logLevelColors: {
+        [LOG_LEVEL.DEBUG]: COLOR.YELLOW
+      }
+    }
+  });
+  ```
 
 ### Decorated functions example
 
