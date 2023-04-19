@@ -1,6 +1,6 @@
 import { LOG_LEVEL, SimpleFormatter } from '../../src';
 import { formatError } from '../../src/formatters/utils/error-formatter';
-import { colorize, getTimeStamp, LOG_LEVEL_COLORS, stringify } from '../../src/utils';
+import { colorize, getTimeStamp, DEFAULT_LOG_LEVEL_COLORS, stringify } from '../../src/utils';
 
 describe('SimpleFormatter', () => {
   let formatter: SimpleFormatter;
@@ -17,7 +17,7 @@ describe('SimpleFormatter', () => {
     };
 
     const expectedMessage = `[${getTimeStamp(payload.timestamp)}] ${colorize(
-      LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG],
+      DEFAULT_LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG],
       LOG_LEVEL.DEBUG
     )} ${payload.args[0]}`;
 
@@ -34,7 +34,7 @@ describe('SimpleFormatter', () => {
     };
 
     const expectedMessage = `[${getTimeStamp(payload.timestamp)}] ${colorize(
-      LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG],
+      DEFAULT_LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG],
       LOG_LEVEL.DEBUG
     )} ${payload.args[0]}\n${stringify(payload.args[1], 2)}`;
 
@@ -50,7 +50,7 @@ describe('SimpleFormatter', () => {
       args: ['This is a debug message']
     };
 
-    const expectedMessage = `${colorize(LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG], LOG_LEVEL.DEBUG)} ${
+    const expectedMessage = `${colorize(DEFAULT_LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG], LOG_LEVEL.DEBUG)} ${
       payload.args[0]
     }`;
 
@@ -67,7 +67,7 @@ describe('SimpleFormatter', () => {
     };
 
     const expectedMessage = `[${getTimeStamp(payload.timestamp)}] ${colorize(
-      LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG],
+      DEFAULT_LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG],
       LOG_LEVEL.DEBUG
     )}`;
 
@@ -84,7 +84,7 @@ describe('SimpleFormatter', () => {
     };
 
     const expectedMessage = `[${getTimeStamp(payload.timestamp)}] ${colorize(
-      LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG],
+      DEFAULT_LOG_LEVEL_COLORS[LOG_LEVEL.DEBUG],
       LOG_LEVEL.DEBUG
     )} ${payload.args[0]}\n${formatError(payload.args[1] as Error)}`;
 

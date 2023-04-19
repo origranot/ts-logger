@@ -1,6 +1,14 @@
 import { ConsoleTransport } from './../src/transports/console.transport';
-import { FileTransport, JsonFormatter, Logger, LOG_LEVEL, SimpleFormatter, UdpTransport } from '../src';
-import { stringify } from '../src/utils';
+import {
+  FileTransport,
+  JsonFormatter,
+  Logger,
+  LOG_LEVEL,
+  SimpleFormatter,
+  UdpTransport,
+  COLOR
+} from '../src';
+import { DEFAULT_LOG_LEVEL_COLORS, colorize, stringify } from '../src/utils';
 
 describe('Logger', () => {
   let logger: Logger;
@@ -17,52 +25,79 @@ describe('Logger', () => {
     expect(logger).toBeDefined();
   });
 
-  it('should create a logger with the provided options', () => {
-    logger = new Logger({ timeStamps: false });
-    expect(logger).toBeDefined();
-    expect(logger['options'].timeStamps).toBe(false);
-  });
-
-  it('should create a logger with default values', () => {
-    logger = new Logger();
-    expect(logger).toBeDefined();
-
-    // Default transports array should be an array with a ConsoleTransport instance in it
-    expect(logger['options'].transports).toHaveLength(1);
-    expect(logger['options'].transports![0]).toBeInstanceOf(ConsoleTransport);
-  });
-
-  it('should create a logger with array of transports', () => {
-    logger = new Logger({
-      transports: [new FileTransport({ path: 'somePath' }), new ConsoleTransport()]
+  describe('options', () => {
+    it('should create a logger with the provided options', () => {
+      logger = new Logger({ timeStamps: false });
+      expect(logger).toBeDefined();
+      expect(logger['options'].timeStamps).toBe(false);
     });
 
-    expect(logger).toBeDefined();
+    it('should create a logger with default values', () => {
+      logger = new Logger();
+      expect(logger).toBeDefined();
 
-    expect(logger['options'].transports).toHaveLength(2);
-    expect(logger['options'].transports![0]).toBeInstanceOf(FileTransport);
-    expect(logger['options'].transports![1]).toBeInstanceOf(ConsoleTransport);
-  });
-
-  it('should create a logger with multiple transports and formatters', () => {
-    logger = new Logger({
-      transports: [
-        new ConsoleTransport(),
-        new UdpTransport({
-          host: 'localhost',
-          port: 514,
-          formatter: new JsonFormatter()
-        })
-      ]
+      // Default transports array should be an array with a ConsoleTransport instance in it
+      expect(logger['options'].transports).toHaveLength(1);
+      expect(logger['options'].transports![0]).toBeInstanceOf(ConsoleTransport);
     });
 
-    expect(logger).toBeDefined();
+    it('should create a logger with a single transport', () => {
+      logger = new Logger({ transports: [new FileTransport({ path: 'somePath' })] });
 
-    expect(logger['options'].transports).toHaveLength(2);
-    expect(logger['options'].transports![0]).toBeInstanceOf(ConsoleTransport);
-    expect(logger['options'].transports![0].options.formatter).toBeInstanceOf(SimpleFormatter);
-    expect(logger['options'].transports![1]).toBeInstanceOf(UdpTransport);
-    expect(logger['options'].transports![1].options.formatter).toBeInstanceOf(JsonFormatter);
+      expect(logger).toBeDefined();
+    });
+
+    it('should override the default log level colors', () => {
+      const customLogLevelColors = {
+        [LOG_LEVEL.DEBUG]: COLOR.RED,
+        [LOG_LEVEL.INFO]: COLOR.GREEN,
+        [LOG_LEVEL.WARN]: COLOR.BLUE,
+        [LOG_LEVEL.ERROR]: COLOR.MAGENTA,
+        [LOG_LEVEL.FATAL]: COLOR.BLACK
+      };
+
+      logger = new Logger({
+        override: {
+          logLevelColors: customLogLevelColors
+        }
+      });
+
+      expect(logger).toBeDefined();
+      expect(logger['options'].override!.logLevelColors).toEqual(customLogLevelColors);
+    });
+
+    it('should create a logger with array of transports', () => {
+      logger = new Logger({
+        transports: [new FileTransport({ path: 'somePath' }), new ConsoleTransport()]
+      });
+
+      expect(logger).toBeDefined();
+
+      expect(logger['options'].transports).toHaveLength(2);
+      expect(logger['options'].transports![0]).toBeInstanceOf(FileTransport);
+      expect(logger['options'].transports![1]).toBeInstanceOf(ConsoleTransport);
+    });
+
+    it('should create a logger with multiple transports and formatters', () => {
+      logger = new Logger({
+        transports: [
+          new ConsoleTransport(),
+          new UdpTransport({
+            host: 'localhost',
+            port: 514,
+            formatter: new JsonFormatter()
+          })
+        ]
+      });
+
+      expect(logger).toBeDefined();
+
+      expect(logger['options'].transports).toHaveLength(2);
+      expect(logger['options'].transports![0]).toBeInstanceOf(ConsoleTransport);
+      expect(logger['options'].transports![0].options.formatter).toBeInstanceOf(SimpleFormatter);
+      expect(logger['options'].transports![1]).toBeInstanceOf(UdpTransport);
+      expect(logger['options'].transports![1].options.formatter).toBeInstanceOf(JsonFormatter);
+    });
   });
 
   describe('log', () => {
@@ -111,6 +146,39 @@ describe('Logger', () => {
       expect(output).toBe(`DEBUG ${args[0]}\n${stringify(args[1], 2)}\n${args[2]}`);
     });
 
+    describe('override', () => {
+      it('should log a message with the overrided log level colors', () => {
+        const customLogLevelColors = {
+          [LOG_LEVEL.DEBUG]: COLOR.RED,
+        };
+
+        logger = new Logger({
+          override: {
+            logLevelColors: customLogLevelColors
+          },
+          timeStamps: false
+        });
+
+        const spy = jest.spyOn(console, 'log');
+
+        logger.debug('This is a debug message');
+        logger.info('this is an info message with default log level color')
+
+        const expectedDebugOutput = `${colorize(
+          customLogLevelColors[LOG_LEVEL.DEBUG],
+          'DEBUG'
+        )} This is a debug message`;
+
+        const expectedInfoOutput = `${colorize(
+          DEFAULT_LOG_LEVEL_COLORS[LOG_LEVEL.INFO],
+          'INFO'
+        )} this is an info message with default log level color`;
+        
+        expect(spy.mock.calls[0][0]).toBe(expectedDebugOutput);
+        expect(spy.mock.calls[1][0]).toBe(expectedInfoOutput);
+      });
+    });
+
     describe('logLevelThreshold', () => {
       it('should not log the message if the log level is below the threshold', () => {
         const spy = jest.spyOn(console, 'log');
@@ -141,7 +209,7 @@ describe('Logger', () => {
             }),
             new ConsoleTransport({
               threshold: LOG_LEVEL.WARN
-            }),
+            })
           ]
         });
         logger.info('This is a debug message');

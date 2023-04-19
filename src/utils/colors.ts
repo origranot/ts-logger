@@ -1,6 +1,6 @@
 import { COLOR, LOG_LEVEL } from './../enums';
 
-export const LOG_LEVEL_COLORS = {
+export const DEFAULT_LOG_LEVEL_COLORS = {
   [LOG_LEVEL.DEBUG]: COLOR.BLUE,
   [LOG_LEVEL.INFO]: COLOR.GREEN,
   [LOG_LEVEL.WARN]: COLOR.YELLOW,

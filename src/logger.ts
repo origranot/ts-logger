@@ -1,9 +1,15 @@
 import { ConsoleTransport } from './transports/console.transport';
-import { LOG_LEVEL } from './enums';
+import { COLOR, LOG_LEVEL } from './enums';
 import { Transport } from './transports';
+import { DEFAULT_LOG_LEVEL_COLORS } from './utils';
 
 export interface LoggerOptions {
   timeStamps?: boolean;
+  override?: {
+    logLevelColors?: {
+      [key in LOG_LEVEL]?: COLOR;
+    };
+  };
   transports?: Transport[];
 }
 
@@ -18,6 +24,13 @@ export class Logger {
     // Default timestamp to be true if not provided
     this.options.timeStamps = this.options.timeStamps === undefined ? true : this.options.timeStamps;
     this.options.transports = this.options.transports || [new ConsoleTransport()];
+
+    // Override default log level colors if provided
+    if (this.options.override && this.options.override.logLevelColors) {
+      for (const [key, value] of Object.entries(this.options.override.logLevelColors)) {
+        DEFAULT_LOG_LEVEL_COLORS[key as LOG_LEVEL] = value;
+      }
+    }
   }
 
   private options: LoggerOptions;
