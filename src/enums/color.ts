@@ -15,6 +15,7 @@ export enum COLOR {
     MAGENTA = '\x1b[35m',
     CYAN = '\x1b[36m',
     WHITE = '\x1b[37m',
+    GRAY = '\x1b[90m',
     
     BG_BLACK = '\x1b[40m',
     BG_RED = '\x1b[41m',
