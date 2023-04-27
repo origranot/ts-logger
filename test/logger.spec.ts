@@ -149,7 +149,7 @@ describe('Logger', () => {
     describe('override', () => {
       it('should log a message with the overrided log level colors', () => {
         const customLogLevelColors = {
-          [LOG_LEVEL.DEBUG]: COLOR.RED,
+          [LOG_LEVEL.DEBUG]: COLOR.RED
         };
 
         logger = new Logger({
@@ -162,7 +162,7 @@ describe('Logger', () => {
         const spy = jest.spyOn(console, 'log');
 
         logger.debug('This is a debug message');
-        logger.info('this is an info message with default log level color')
+        logger.info('this is an info message with default log level color');
 
         const expectedDebugOutput = `${colorize(
           customLogLevelColors[LOG_LEVEL.DEBUG],
@@ -173,7 +173,7 @@ describe('Logger', () => {
           DEFAULT_LOG_LEVEL_COLORS[LOG_LEVEL.INFO],
           'INFO'
         )} this is an info message with default log level color`;
-        
+
         expect(spy.mock.calls[0][0]).toBe(expectedDebugOutput);
         expect(spy.mock.calls[1][0]).toBe(expectedInfoOutput);
       });

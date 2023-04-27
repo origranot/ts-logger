@@ -4,6 +4,7 @@ import { Transport } from './transports';
 import { DEFAULT_LOG_LEVEL_COLORS } from './utils';
 
 export interface LoggerOptions {
+  name?: string;
   timeStamps?: boolean;
   override?: {
     logLevelColors?: {
@@ -44,7 +45,10 @@ export class Logger {
       const formattedLog = transport.options.formatter!.format({
         level,
         args,
-        timestamp: this.options.timeStamps ? new Date() : undefined
+        options: {
+          name: this.options.name || undefined,
+          timestamp: this.options.timeStamps ? new Date() : undefined
+        }
       });
 
       transport.handle({ message: formattedLog });
