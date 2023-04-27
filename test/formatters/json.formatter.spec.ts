@@ -12,14 +12,18 @@ describe('JsonFormatter', () => {
     const payload: FormatterPayload = {
       level: LOG_LEVEL.DEBUG,
       args: ['This is a test log', { extraData: 'test data' }],
-      timestamp: new Date()
+      options: {
+        name: 'test-logger',
+        timestamp: new Date()
+      }
     };
 
     const expectedOutput = stringify({
       level: payload.level,
       0: payload.args[0],
       1: payload.args[1],
-      ...{ timestamp: getTimeStamp(payload.timestamp!) }
+      timestamp: getTimeStamp(payload.options!.timestamp!),
+      name: payload.options!.name
     });
 
     const output = formatter.format(payload);

@@ -3,10 +3,13 @@ import { colorize, getTimeStamp, isError, DEFAULT_LOG_LEVEL_COLORS, stringify } 
 import { formatError } from './utils/error-formatter';
 
 export class SimpleFormatter implements Formatter {
-  format({ level, args, timestamp }: FormatterPayload): string {
+  format({ level, args, options }: FormatterPayload): string {
+    const { name, timestamp } = options || {};
+
     let prefix: string = '';
     prefix += timestamp ? `[${getTimeStamp(timestamp)}] ` : '';
     prefix += `${colorize(DEFAULT_LOG_LEVEL_COLORS[level], level)}`;
+    prefix += name ? ` [${name}]` : '';
 
     const message = this.parse(args);
 

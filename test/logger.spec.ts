@@ -14,7 +14,7 @@ describe('Logger', () => {
   let logger: Logger;
 
   beforeEach(() => {
-    logger = new Logger({ timeStamps: false });
+    logger = new Logger({ timestamps: false });
   });
 
   afterEach(() => {
@@ -27,9 +27,10 @@ describe('Logger', () => {
 
   describe('options', () => {
     it('should create a logger with the provided options', () => {
-      logger = new Logger({ timeStamps: false });
+      logger = new Logger({ timestamps: false, name: 'logger' });
       expect(logger).toBeDefined();
-      expect(logger['options'].timeStamps).toBe(false);
+      expect(logger['options'].timestamps).toBe(false);
+      expect(logger['options'].name).toBe('logger');
     });
 
     it('should create a logger with default values', () => {
@@ -39,6 +40,8 @@ describe('Logger', () => {
       // Default transports array should be an array with a ConsoleTransport instance in it
       expect(logger['options'].transports).toHaveLength(1);
       expect(logger['options'].transports![0]).toBeInstanceOf(ConsoleTransport);
+      expect(logger['options'].transports![0].options.formatter).toBeInstanceOf(SimpleFormatter);
+      expect(logger['options'].name).toBeUndefined();
     });
 
     it('should create a logger with a single transport', () => {
@@ -78,6 +81,13 @@ describe('Logger', () => {
       expect(logger['options'].transports![1]).toBeInstanceOf(ConsoleTransport);
     });
 
+    it('should create a logger with a name', () => {
+      logger = new Logger({ name: 'test-logger' });
+
+      expect(logger).toBeDefined();
+      expect(logger['options'].name).toBe('test-logger');
+    });
+
     it('should create a logger with multiple transports and formatters', () => {
       logger = new Logger({
         transports: [
@@ -107,6 +117,15 @@ describe('Logger', () => {
       logger.debug('This is a debug message');
       const output = stripAnsi(spy.mock.calls[0][0]);
       expect(output).toBe('DEBUG This is a debug message');
+    });
+
+    it('should log the message with the name of the logger', () => {
+      const spy = jest.spyOn(console, 'log');
+
+      logger = new Logger({ timestamps: false, name: 'test-logger' });
+      logger.debug('This is a debug message');
+      const output = stripAnsi(spy.mock.calls[0][0]);
+      expect(output).toBe('DEBUG [test-logger] This is a debug message');
     });
 
     it('should log the message with the correct log level even if options is not provided', () => {
@@ -149,20 +168,20 @@ describe('Logger', () => {
     describe('override', () => {
       it('should log a message with the overrided log level colors', () => {
         const customLogLevelColors = {
-          [LOG_LEVEL.DEBUG]: COLOR.RED,
+          [LOG_LEVEL.DEBUG]: COLOR.RED
         };
 
         logger = new Logger({
           override: {
             logLevelColors: customLogLevelColors
           },
-          timeStamps: false
+          timestamps: false
         });
 
         const spy = jest.spyOn(console, 'log');
 
         logger.debug('This is a debug message');
-        logger.info('this is an info message with default log level color')
+        logger.info('this is an info message with default log level color');
 
         const expectedDebugOutput = `${colorize(
           customLogLevelColors[LOG_LEVEL.DEBUG],
@@ -173,7 +192,7 @@ describe('Logger', () => {
           DEFAULT_LOG_LEVEL_COLORS[LOG_LEVEL.INFO],
           'INFO'
         )} this is an info message with default log level color`;
-        
+
         expect(spy.mock.calls[0][0]).toBe(expectedDebugOutput);
         expect(spy.mock.calls[1][0]).toBe(expectedInfoOutput);
       });
@@ -218,11 +237,11 @@ describe('Logger', () => {
       });
     });
 
-    describe('timeStamps', () => {
+    describe('timestamps', () => {
       it('should include the timestamp in the log message when timeStamps option is true', () => {
         const spy = jest.spyOn(console, 'log');
 
-        logger = new Logger({ timeStamps: true });
+        logger = new Logger({ timestamps: true });
         logger.debug('This is a debug message');
 
         const output = stripAnsi(spy.mock.calls[0][0]);

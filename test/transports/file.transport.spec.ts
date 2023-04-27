@@ -3,7 +3,7 @@ import { unlinkSync, readFileSync, mkdirSync, rmSync, existsSync } from 'fs';
 import { join } from 'path';
 
 describe('FileTransport', () => {
-  const path = 'test/logs';
+  const path = 'test/logs.log';
   const options = { path };
   let fileTransport = new FileTransport(options);
 
@@ -15,6 +15,19 @@ describe('FileTransport', () => {
 
     // reset all mocks
     jest.restoreAllMocks();
+  });
+
+  it('should create a new instance of FileTransport', () => {
+    expect(fileTransport).toBeInstanceOf(FileTransport);
+  });
+
+  it('should create the file if it does not exist', () => {
+    const options = { path: 'test/logs.log' };
+    const fileTransport = new FileTransport(options);
+    const payload: TransportPayload = { message: 'hello world' };
+    fileTransport.handle(payload);
+    const log = readFileSync(options.path, 'utf-8');
+    expect(log).toEqual('hello world\n');
   });
 
   it('should write logs to file', () => {

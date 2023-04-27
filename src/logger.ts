@@ -4,7 +4,8 @@ import { Transport } from './transports';
 import { DEFAULT_LOG_LEVEL_COLORS } from './utils';
 
 export interface LoggerOptions {
-  timeStamps?: boolean;
+  name?: string;
+  timestamps?: boolean;
   override?: {
     logLevelColors?: {
       [key in LOG_LEVEL]?: COLOR;
@@ -22,7 +23,7 @@ export class Logger {
     this.options = loggerOptions || {};
 
     // Default timestamp to be true if not provided
-    this.options.timeStamps = this.options.timeStamps === undefined ? true : this.options.timeStamps;
+    this.options.timestamps = this.options.timestamps === undefined ? true : this.options.timestamps;
     this.options.transports = this.options.transports || [new ConsoleTransport()];
 
     // Override default log level colors if provided
@@ -44,7 +45,10 @@ export class Logger {
       const formattedLog = transport.options.formatter!.format({
         level,
         args,
-        timestamp: this.options.timeStamps ? new Date() : undefined
+        options: {
+          name: this.options.name || undefined,
+          timestamp: this.options.timestamps ? new Date() : undefined
+        }
       });
 
       transport.handle({ message: formattedLog });

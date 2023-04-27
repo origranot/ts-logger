@@ -2,8 +2,11 @@ import { LOG_LEVEL } from '../enums';
 
 export interface FormatterPayload {
   level: LOG_LEVEL;
-  args: unknown[];
-  timestamp?: Date;
+  args: any[];
+  options?: {
+    name?: string;
+    timestamp?: Date;
+  };
 }
 
 export interface Formatter {

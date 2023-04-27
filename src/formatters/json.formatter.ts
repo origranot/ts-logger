@@ -2,11 +2,12 @@ import { Formatter, FormatterPayload } from '../interfaces';
 import { getTimeStamp, isError, stringify } from '../utils';
 
 export class JsonFormatter implements Formatter {
-  format({ level, timestamp, args }: FormatterPayload): string {
+  format({ level, args, options }: FormatterPayload): string {
     const logData = {
       level,
       ...this.parse(args),
-      ...(timestamp && { timestamp: getTimeStamp(timestamp) })
+      ...(options?.timestamp && { timestamp: getTimeStamp(options?.timestamp) }),
+      ...(options?.name && { name: options?.name })
     };
 
     return stringify(logData);

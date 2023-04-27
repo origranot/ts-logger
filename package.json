@@ -24,7 +24,7 @@
     "build": "npm run clean && npm run build:esm && npm run build:cjs",
     "build:esm": "tsc -p ./tsconfig.esm.json && mv lib/esm/index.js lib/esm/index.mjs",
     "build:cjs": "tsc -p ./tsconfig.cjs.json",
-    "test": "jest",
+    "test": "jest --silent",
     "semantic-release": "semantic-release",
     "prepack": "npm run build"
   },
