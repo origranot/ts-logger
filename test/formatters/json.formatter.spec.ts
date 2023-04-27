@@ -22,8 +22,8 @@ describe('JsonFormatter', () => {
       level: payload.level,
       0: payload.args[0],
       1: payload.args[1],
-      timestamp: getTimeStamp(payload.options!.timestamp!),
-      name: payload.options!.name
+      name: payload.options!.name,
+      timestamp: getTimeStamp(payload.options!.timestamp!)
     });
 
     const output = formatter.format(payload);

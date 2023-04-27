@@ -6,8 +6,8 @@ export class JsonFormatter implements Formatter {
     const logData = {
       level,
       ...this.parse(args),
+      ...(options?.name && { name: options?.name }),
       ...(options?.timestamp && { timestamp: getTimeStamp(options?.timestamp) }),
-      ...(options?.name && { name: options?.name })
     };
 
     return stringify(logData);
