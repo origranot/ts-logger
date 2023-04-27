@@ -41,9 +41,7 @@ describe('UdpTransport', () => {
     };
 
     spy = jest.spyOn(transport['socket'], 'send');
-
     transport.handle(payload);
-
     expect(spy).toHaveBeenCalledWith(payload.message, options.port, options.host);
   });
 });

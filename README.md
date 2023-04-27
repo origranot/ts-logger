@@ -50,8 +50,8 @@ logger.info('You can also log objects', {
 ```
 
 #### Optional parameters
-
-- timeStamps (Boolean): Whether to include timestamps in logs (default: true)
+- name (string): The name of the logger. (optional)
+- timestamps (Boolean): Whether to include timestamps in logs (default: true)
 - transports: Array of transports to process and log the data. (default: ConsoleTransport)
 - override: Override default options (see below)
 

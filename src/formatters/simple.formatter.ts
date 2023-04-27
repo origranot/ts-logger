@@ -9,7 +9,7 @@ export class SimpleFormatter implements Formatter {
     let prefix: string = '';
     prefix += timestamp ? `[${getTimeStamp(timestamp)}] ` : '';
     prefix += `${colorize(DEFAULT_LOG_LEVEL_COLORS[level], level)}`;
-    prefix += name ? ` [${name}] ` : '';
+    prefix += name ? ` [${name}]` : '';
 
     const message = this.parse(args);
 
