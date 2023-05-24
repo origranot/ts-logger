@@ -12,6 +12,7 @@ export interface LoggerOptions {
     };
   };
   transports?: Transport[];
+  suppress?: boolean;
 }
 
 export interface DecoratorOptions {
@@ -37,6 +38,10 @@ export class Logger {
   private options: LoggerOptions;
 
   private log(level: LOG_LEVEL, ...args: unknown[]) {
+    if (this.options.suppress) {
+      return;
+    }
+    
     for (const transport of this.options.transports!) {
       if (level < transport.options.threshold!) {
         return;
