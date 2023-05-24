@@ -42,6 +42,7 @@ describe('Logger', () => {
       expect(logger['options'].transports![0]).toBeInstanceOf(ConsoleTransport);
       expect(logger['options'].transports![0].options.formatter).toBeInstanceOf(SimpleFormatter);
       expect(logger['options'].name).toBeUndefined();
+      expect(logger['options'].suppress).toBeUndefined();
     });
 
     it('should create a logger with a single transport', () => {
@@ -126,6 +127,14 @@ describe('Logger', () => {
       logger.debug('This is a debug message');
       const output = stripAnsi(spy.mock.calls[0][0]);
       expect(output).toBe('DEBUG [test-logger] This is a debug message');
+    });
+
+    it('should not log anything if supress flag is set to true', () => {
+      const spy = jest.spyOn(console, 'log');
+
+      logger = new Logger({ timestamps: false, name: 'test-logger', suppress: true });
+      logger.debug('This is a debug message');
+      expect(spy.mock.calls).toHaveLength(0);
     });
 
     it('should log the message with the correct log level even if options is not provided', () => {
