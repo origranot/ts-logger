@@ -53,6 +53,7 @@ logger.info('You can also log objects', {
 - name (string): The name of the logger. (optional)
 - timestamps (Boolean): Whether to include timestamps in logs (default: true)
 - transports: Array of transports to process and log the data. (default: ConsoleTransport)
+- suppress (Boolean): Whether to suppress logs (default: false)
 - override: Override default options (see below)
 
 #### Override default options
